@@ -148,18 +148,6 @@ def list_settings_handler(_):  # _ - it's parsed args without usage
     )
 
     script_filter.add_item(
-        title="Keychain account",
-        subtitle=settings.KEYCHAIN_ACCOUNT.raw_value,
-        arg=settings.KEYCHAIN_ACCOUNT.name,
-    )
-
-    script_filter.add_item(
-        title="Keychain service",
-        subtitle=settings.KEYCHAIN_SERVICE.raw_value,
-        arg=settings.KEYCHAIN_SERVICE.name,
-    )
-
-    script_filter.add_item(
         title="Show attribute values in Alfred",
         subtitle=cast_bool_to_yesno(settings.SHOW_ATTRIBUTE_VALUES.value),
         arg=settings.SHOW_ATTRIBUTE_VALUES.name,
@@ -193,6 +181,18 @@ def list_settings_handler(_):  # _ - it's parsed args without usage
         title="KeepassXC CLI path",
         subtitle=settings.KEEPASSXC_CLI_PATH.raw_value,
         arg=settings.KEEPASSXC_CLI_PATH.name,
+    )
+
+    script_filter.add_item(
+        title="Keychain account",
+        subtitle=settings.KEYCHAIN_ACCOUNT.raw_value,
+        arg=settings.KEYCHAIN_ACCOUNT.name,
+    )
+
+    script_filter.add_item(
+        title="Keychain service",
+        subtitle=settings.KEYCHAIN_SERVICE.raw_value,
+        arg=settings.KEYCHAIN_SERVICE.name,
     )
 
     script_filter.send()
