@@ -48,7 +48,7 @@ const EnvNames = Object.freeze({
 })
 
 
-const Settings = Object.freeze({
+const Settings = {
     ALFRED_KEYWORD: getenv(EnvNames.ALFRED_KEYWORD),
     KEEPASSXC_DB_PATH: getenv(EnvNames.KEEPASSXC_DB_PATH),
     KEEPASSXC_CLI_PATH: getenv(EnvNames.KEEPASSXC_CLI_PATH),
@@ -61,7 +61,7 @@ const Settings = Object.freeze({
     DESIRED_ATTRIBUTES: getenv(EnvNames.DESIRED_ATTRIBUTES),
     SHOW_PASSWORDS: getenv(EnvNames.SHOW_PASSWORDS),
     ENTRY_DELIMITER: getenv(EnvNames.ENTRY_DELIMITER),
-})
+}
 
 
 const DefaultEnvValues = {
@@ -116,10 +116,20 @@ function isEmptySettings() {
 }
 
 
+/**
+ * This function resets all environment variables to default values.
+ * Also it's necessary to reset Settings object to default values because
+ * Settings object takes values from environment and we can't get new
+ * environment values in runtime but we need these values.
+ */
 function resetEnvsToDefaults() {
     for (let env in DefaultEnvValues) {
         let exportable = env === EnvNames.ALFRED_KEYWORD
         setEnv(env, DefaultEnvValues[env], exportable)
+    }
+
+    for (let key in Settings) {
+        Settings[key] = DefaultEnvValues[EnvNames[key]]
     }
 }
 
@@ -142,6 +152,14 @@ function showMessage(message) {
         defaultButton: "Ok",
         withTitle: windowTitle,
     })
+}
+
+
+function showDialog(message, actionButtons, withCancelButton=true) {
+    let buttons = withCancelButton ? [cancelButton].concat(actionButtons): actionButtons
+    let response = app.displayDialog(message, {buttons: buttons, withTitle: windowTitle})
+    throwCancelErrorIfCancelButton(response)
+    return response
 }
 
 
@@ -229,14 +247,15 @@ function askKeychainService() {
 }
 
 
-function addPasswordToKeychain(password, account, service, overwrite=false) {
-    /**
-    * Adds the password to keychain or updates an keychain item if needed.
-    * It's necessary to save the password to environment variable and
-    * it will be fetched from a shell command.
-    * It should help avoid password leakage.
-    */
-
+/**
+ * Adds the password to keychain or updates an keychain item if needed.
+ * It's necessary to save the password to environment variable and
+ * it will be fetched from a shell command.
+ * It should help avoid password leakage.
+ */
+function addPasswordToKeychain(password, overwrite=false) {
+    let account = Settings.KEYCHAIN_ACCOUNT
+    let service = Settings.KEYCHAIN_SERVICE
     let temporaryPasswordEnv = "password"
     let command = `security add-generic-password -a ${account} -s ${service}`
 
@@ -259,17 +278,12 @@ function addPasswordToKeychain(password, account, service, overwrite=false) {
 
             let updateButton = "Update the existing entry"
             let useExistingButton = "Use the existing entry"
-
-            let response = app.displayDialog(message, {
-                buttons: [cancelButton, updateButton, useExistingButton],
-                withTitle: windowTitle,
-            })
-
-            throwCancelErrorIfCancelButton(response)
+            let actionButtons = [updateButton, useExistingButton]
+            let response = showDialog(message, actionButtons)
 
             if (response.buttonReturned === updateButton) {
                 overwrite = true
-                addPasswordToKeychain(password, account, service, overwrite)
+                addPasswordToKeychain(password, overwrite)
             }
 
         } else if (err.errorNumber > 0) {
@@ -281,9 +295,52 @@ function addPasswordToKeychain(password, account, service, overwrite=false) {
 }
 
 
+function deletePasswordFromKeychain() {
+    let account = Settings.KEYCHAIN_ACCOUNT
+    let service = Settings.KEYCHAIN_SERVICE
+
+    if (!account || !service) {
+        return
+    }
+
+    let command = `security delete-generic-password -a ${account} -s ${service}`
+
+    try {
+        app.doShellScript(command)
+    } catch (err) {
+        let passwordDoesNotExistErrorNumber = 44
+
+        if (err.errorNumber === passwordDoesNotExistErrorNumber) {
+            // It's considered a successful operation so we ignore it.
+        } else if (err.errorNumber > 0) {
+            throw err
+        }
+    }
+}
+
+
 function askKeepassXCMasterPassword() {
+    if (Settings.KEEPASSXC_MASTER_PASSWORD === maskedPassword) {
+        let changePasswordButton = "Change"
+        let removePasswordButton = "Remove"
+        let actionButtons = [removePasswordButton, changePasswordButton]
+        let message = "What would you like to do with your password?"
+        let response = showDialog(message, actionButtons)
+
+        if (response.buttonReturned === removePasswordButton) {
+            let noAsCancel = true
+            let message = "The workflow will forget your password. Do you want to continue?"
+            askYesOrNo(message, noAsCancel)
+            deletePasswordFromKeychain()
+            return ""
+        }
+    }
+
     let message = "Enter the password to use KeepassXC database.\nif you don't have the password then press continue."
-    return askText(message, {hideUserInput: true})
+    let userPassword = askText(message, {hideUserInput: true})
+
+    addPasswordToKeychain(userPassword)
+    return maskedPassword
 }
 
 
@@ -292,12 +349,8 @@ function askKeepassXCKeyFilePath() {
         let removeButton = "Remove"
         let changeButton = "Change"
         let message = "You have the key. You can remove it or define a different one."
-        let response = app.displayDialog(message, {
-            buttons: [cancelButton, removeButton, changeButton],
-            withTitle: windowTitle,
-        })
-
-        throwCancelErrorIfCancelButton(response)
+        let actionButtons = [removeButton, changeButton]
+        let response = showDialog(message, actionButtons)
 
         if (response.buttonReturned === removeButton) {
             return ""
@@ -375,11 +428,6 @@ function changeSettingKey(argv) {
     let response = dialogsMap[settingKey]()
     let exportable = settingKey === EnvNames.ALFRED_KEYWORD
 
-    if (settingKey === EnvNames.KEEPASSXC_MASTER_PASSWORD) {
-        addPasswordToKeychain(response, Settings.KEYCHAIN_ACCOUNT, Settings.KEYCHAIN_SERVICE)
-        response = maskedPassword
-    }
-
     setEnv(settingKey, response, exportable)
     showMessage("The settings was changed successfully.")
 }
@@ -394,6 +442,7 @@ function showResetDialog() {
 
 function resetSettings() {
     showResetDialog()
+    deletePasswordFromKeychain()
     resetEnvsToDefaults()
     showMessage("The settings were reset to defaults successfully.")
 }
@@ -404,24 +453,20 @@ function init() {
         showResetDialog()
     }
 
-    let db = askKeepassXCDBPath()
-    let keyfile = DefaultEnvValues[EnvNames.KEEPASSXC_KEYFILE_PATH]
+    deletePasswordFromKeychain()
+    resetEnvsToDefaults()
 
-    if (askYesOrNo("Do you have a key file?")) {
-        keyfile = askKeepassXCKeyFilePath()
-    }
+    let db = askKeepassXCDBPath()
+
+    let keyfile = askYesOrNo("Do you have a key file") ?
+        askKeepassXCKeyFilePath() :
+        DefaultEnvValues[EnvNames.KEEPASSXC_KEYFILE_PATH]
 
     let password = askKeepassXCMasterPassword()
 
-    resetEnvsToDefaults()
-
-    let defaultKeychainAccount = DefaultEnvValues[EnvNames.KEYCHAIN_ACCOUNT]
-    let defaultKeychainService = DefaultEnvValues[EnvNames.KEYCHAIN_SERVICE]
-    addPasswordToKeychain(password, defaultKeychainAccount, defaultKeychainService)
-
     setEnv(EnvNames.KEEPASSXC_DB_PATH, db)
     setEnv(EnvNames.KEEPASSXC_KEYFILE_PATH, keyfile)
-    setEnv(EnvNames.KEEPASSXC_MASTER_PASSWORD, maskedPassword)
+    setEnv(EnvNames.KEEPASSXC_MASTER_PASSWORD, password)
     showMessage("The initialization was successful.")
 }
 

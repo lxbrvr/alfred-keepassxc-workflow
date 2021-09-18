@@ -70,7 +70,8 @@ That's it. Now you can search your KeepassXC entries using Alfred.
 ### Reset settings
 
 Call Alfred and type `kp` or `kp:reset`. It'll ask you for confirmation. 
-If you select `yes` then workflow will be reset to default settings.
+If you select `yes` then workflow will be reset to default settings and will
+delete a password from Keychain.
 
 ### Settings
 
@@ -78,7 +79,7 @@ If you select `yes` then workflow will be reset to default settings.
 | --- | --- | --- |
 | Keyword name for name Alfred's workflow | alfred_keyword | Keyword name for calling of Alfred's workflow. Default value is `kp`. |
 | KeepassXC database | keepassxc_db_path | KeepassXC database file on system. It requires `.kdbx` file. |
-| KeepassXC master password | keepassxc_master_password | The master password for a KeepassXC database. The password may be empty. Note the master password does not store in environment variables.|
+| KeepassXC master password | keepassxc_master_password | The master password for a KeepassXC database. If a password does not exist then it will be added to keychain. If a password already exists then the workflow will ask you what you want to do with it. You can remove it from your keychain or change it to another one. If your KeepassXC database does not have a password then just leave the password field blank. Note that the master password is not saved in environment variables.|
 | KeepassXC key file | keepassxc_keyfile_path | KeepassXC key file on system. This parameter is optional. |
 | Keychain account | keychain_account | A name of keychain account. By default it's the name of your system user. |
 | Keychain service | keychain_service | A name of keychain service. By default it's `com.lxbrvr.keepassxcalfred` |

@@ -9,6 +9,7 @@ from handlers import (
     list_settings_handler,
     search_handler,
     validate_settings,
+    require_password,
 )
 from helpers import cast_bool_to_yesno
 
@@ -43,6 +44,33 @@ class TestValidateSettingsDecorator(object):
         handler_mock = mocker.Mock()
         validate_settings(handler_mock)()
 
+        handler_mock.assert_called_once()
+
+
+class TestRequirePasswordDecorator(object):
+    def test_without_password_in_settings(self, mocker, configurable_valid_settings):
+        configurable_valid_settings(keepassxc_master_password="")
+        add_item_mock = mocker.patch("handlers.AlfredScriptFilter.add_item")
+        handler_mock = mocker.Mock()
+        send_mock = mocker.patch("handlers.AlfredScriptFilter.send")
+        require_password(handler_mock)()
+
+        send_mock.assert_called_once()
+        handler_mock.assert_not_called()
+
+        add_item_mock.assert_called_once_with(
+            title="Please enter your password",
+            subtitle="Press to open a dialog window",
+            arg="keepassxc_master_password",
+        )
+
+    def test_with_password_in_settings(self, mocker, configurable_valid_settings):
+        configurable_valid_settings(keepassxc_master_password="password")
+        handler_mock = mocker.Mock()
+        send_mock = mocker.patch("handlers.AlfredScriptFilter.send")
+        require_password(handler_mock)()
+
+        send_mock.assert_not_called()
         handler_mock.assert_called_once()
 
 

@@ -64,10 +64,30 @@ def valid_settings(settings_factory, keychain_service, keychain_account):
         alfred_keyword="kp",
         keepassxc_db_path="/db/path",
         keepassxc_cli_path="/cli/path",
+        keepassxc_master_password="******",
         keychain_service=keychain_service,
         keychain_account=keychain_account,
         entry_delimiter=" > ",
     )
+
+
+@pytest.fixture
+def configurable_valid_settings(settings_factory, keychain_service, keychain_account):
+    def wrapper(**kw):
+        settings = {
+            "alfred_keyword": "kp",
+            "keepassxc_db_path": "/db/path",
+            "keepassxc_cli_path": "/cli/path",
+            "keepassxc_master_password": "******",
+            "keychain_service": keychain_service,
+            "keychain_account": keychain_account,
+            "entry_delimiter": " > ",
+        }
+        settings.update(**kw)
+
+        return settings_factory(**settings)
+
+    yield wrapper
 
 
 @pytest.fixture

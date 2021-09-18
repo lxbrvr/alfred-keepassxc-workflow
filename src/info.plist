@@ -60,6 +60,18 @@
 			</dict>
 			<dict>
 				<key>destinationuid</key>
+				<string>3F5B4A74-E524-4ADE-B5FF-1E481FCAB6F5</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>sourceoutputuid</key>
+				<string>FC22BDD2-0870-4886-8B58-7D306E8EE9FF</string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
 				<string>5220E64D-387E-4FA5-AE40-51937778C9FB</string>
 				<key>modifiers</key>
 				<integer>0</integer>
@@ -206,6 +218,64 @@
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>conditions</key>
+				<array>
+					<dict>
+						<key>inputstring</key>
+						<string></string>
+						<key>matchcasesensitive</key>
+						<false/>
+						<key>matchmode</key>
+						<integer>0</integer>
+						<key>matchstring</key>
+						<string>settings</string>
+						<key>outputlabel</key>
+						<string>open settings</string>
+						<key>uid</key>
+						<string>298D37E2-5DF5-4CC9-AC1E-975328E6FF60</string>
+					</dict>
+					<dict>
+						<key>inputstring</key>
+						<string></string>
+						<key>matchcasesensitive</key>
+						<false/>
+						<key>matchmode</key>
+						<integer>0</integer>
+						<key>matchstring</key>
+						<string>express</string>
+						<key>outputlabel</key>
+						<string>start express init</string>
+						<key>uid</key>
+						<string>F468ECAB-7285-4D5D-806F-5C3765EED841</string>
+					</dict>
+					<dict>
+						<key>inputstring</key>
+						<string></string>
+						<key>matchcasesensitive</key>
+						<false/>
+						<key>matchmode</key>
+						<integer>0</integer>
+						<key>matchstring</key>
+						<string>KEEPASSXC_MASTER_PASSWORD</string>
+						<key>outputlabel</key>
+						<string>ask password</string>
+						<key>uid</key>
+						<string>FC22BDD2-0870-4886-8B58-7D306E8EE9FF</string>
+					</dict>
+				</array>
+				<key>elselabel</key>
+				<string>search</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.conditional</string>
+			<key>uid</key>
+			<string>7146D7E9-9CC8-4AB4-A4CD-DE15B707908C</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>alfredfiltersresults</key>
 				<false/>
 				<key>alfredfiltersresultsmatchmode</key>
@@ -312,50 +382,6 @@
 						<key>matchmode</key>
 						<integer>0</integer>
 						<key>matchstring</key>
-						<string>settings</string>
-						<key>outputlabel</key>
-						<string>settings</string>
-						<key>uid</key>
-						<string>298D37E2-5DF5-4CC9-AC1E-975328E6FF60</string>
-					</dict>
-					<dict>
-						<key>inputstring</key>
-						<string></string>
-						<key>matchcasesensitive</key>
-						<false/>
-						<key>matchmode</key>
-						<integer>0</integer>
-						<key>matchstring</key>
-						<string>express</string>
-						<key>outputlabel</key>
-						<string>express init</string>
-						<key>uid</key>
-						<string>F468ECAB-7285-4D5D-806F-5C3765EED841</string>
-					</dict>
-				</array>
-				<key>elselabel</key>
-				<string>else</string>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.utility.conditional</string>
-			<key>uid</key>
-			<string>7146D7E9-9CC8-4AB4-A4CD-DE15B707908C</string>
-			<key>version</key>
-			<integer>1</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>conditions</key>
-				<array>
-					<dict>
-						<key>inputstring</key>
-						<string></string>
-						<key>matchcasesensitive</key>
-						<false/>
-						<key>matchmode</key>
-						<integer>0</integer>
-						<key>matchstring</key>
 						<string>back</string>
 						<key>outputlabel</key>
 						<string>back</string>
@@ -364,7 +390,7 @@
 					</dict>
 				</array>
 				<key>elselabel</key>
-				<string>else</string>
+				<string>search</string>
 			</dict>
 			<key>type</key>
 			<string>alfred.workflow.utility.conditional</string>
@@ -638,9 +664,9 @@
 			<key>note</key>
 			<string>Calls the first workflow item. User will return to search with his query.</string>
 			<key>xpos</key>
-			<integer>830</integer>
+			<integer>810</integer>
 			<key>ypos</key>
-			<integer>25</integer>
+			<integer>35</integer>
 		</dict>
 		<key>3F5B4A74-E524-4ADE-B5FF-1E481FCAB6F5</key>
 		<dict>
@@ -663,16 +689,16 @@
 		<key>582F3D94-E0EA-4181-8A7F-BA9C87AC9C08</key>
 		<dict>
 			<key>xpos</key>
-			<integer>695</integer>
+			<integer>690</integer>
 			<key>ypos</key>
 			<integer>90</integer>
 		</dict>
 		<key>7146D7E9-9CC8-4AB4-A4CD-DE15B707908C</key>
 		<dict>
 			<key>xpos</key>
-			<integer>230</integer>
+			<integer>215</integer>
 			<key>ypos</key>
-			<integer>75</integer>
+			<integer>60</integer>
 		</dict>
 		<key>7DF2FBB4-C11B-4F61-A730-1B216ACD4935</key>
 		<dict>
@@ -688,9 +714,9 @@
 			<key>note</key>
 			<string>Copies a selected attribute to clipboard</string>
 			<key>xpos</key>
-			<integer>810</integer>
+			<integer>790</integer>
 			<key>ypos</key>
-			<integer>155</integer>
+			<integer>165</integer>
 		</dict>
 		<key>C5304F2E-3703-45AE-985B-3D66C24D07E4</key>
 		<dict>

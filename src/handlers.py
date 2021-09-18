@@ -6,6 +6,33 @@ from helpers import cast_bool_to_yesno
 from services import initialize_keepassxc_client
 
 
+def require_password(func):
+    """Requires a password.
+
+    If there is no password, the missing password notification item will
+    be displayed in Alfred. When an user selects this item, he will be
+    prompted to enter a new password. So it is necessary to send the arg
+    with settings.KEEPASSXC_MASTER_PASSWORD.name value. It will be passed
+    to js script as parameter.
+    """
+
+    def wrapper(*args, **kw):
+        script_filter = AlfredScriptFilter()
+
+        if settings.KEEPASSXC_MASTER_PASSWORD.value:
+            return func(*args, **kw)
+
+        script_filter.add_item(
+            title="Please enter your password",
+            subtitle="Press to open a dialog window",
+            arg=settings.KEEPASSXC_MASTER_PASSWORD.name,
+        )
+
+        script_filter.send()
+
+    return wrapper
+
+
 def validate_settings(func):
     """
     Checks settings before a wrapped func calling.
@@ -36,6 +63,7 @@ def validate_settings(func):
 
 
 @validate_settings
+@require_password
 def search_handler(parsed_args):
     """
     Forms a list with found KeepassXC entries by a passed query
@@ -61,6 +89,7 @@ def search_handler(parsed_args):
 
 
 @validate_settings
+@require_password
 def fetch_handler(parsed_args):
     """Forms a list with KeepassXC entry attributes and send it to the Alfred's script filter."""
 
