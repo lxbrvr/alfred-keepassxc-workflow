@@ -224,26 +224,61 @@ function askKeepassXCCLIPath() {
 
 
 function askShowValues() {
-    return askYesOrNo("Show values for attributes?")
+    let message = [
+        "By default, the workflow shows the attribute values requested from ",
+        "KeepassXC, such as password, username, etc. ",
+        "You can hide these values and display only the attribute names.",
+        "\n\n",
+        "Display values?",
+    ].join("")
+
+    return askYesOrNo(message)
 }
 
 
 function askShowUnfilledAttributes() {
-    return askYesOrNo("Show unfilled attributes?")
+    let message = [
+        "By default, the workflow displays all attributes of records ",
+        "requested from KeepassXC. You can hide attributes that have no data. ",
+        "For example, if the username field of any record in KeepassXC is ",
+        "not filled then it will not be displayed.",
+        "\n\n",
+        "Display attributes that have no data?",
+    ].join("")
+
+    return askYesOrNo(message)
 }
 
 
 function askKeychainAccount() {
-    let defaultAnswer = Settings.KEYCHAIN_ACCOUNT
-    let message = "Enter the account name you want to use for the keychain."
-    return askText(message, {defaultAnswer: defaultAnswer, requireText: true})
+    let message = [
+        "The workflow saves your KeepassXC master password and some ",
+        "parameters into the keychain (password management system in macOS). ",
+        "These parameters will be used to search for the master password in ",
+        "the keychain. The account name is one of these parameters.",
+        "\n\n",
+        "Warning: it is not recommended to change it if you are not sure what it affects.",
+        "\n\n",
+        "Enter the account name you want to use.",
+    ].join("")
+
+    return askText(message, {defaultAnswer: Settings.KEYCHAIN_ACCOUNT, requireText: true})
 }
 
 
 function askKeychainService() {
-    let currentService = Settings.KEYCHAIN_SERVICE
-    let message = "Enter the service name you want to use for the keychain."
-    return askText(message, {defaultAnswer: currentService, requireText: true})
+    let message = [
+        "The workflow saves your KeepassXC master password and some ",
+        "parameters into the keychain (password management system in macOS). ",
+        "These parameters will be used to search for the master password in ",
+        "the keychain. The service name is one of these parameters.",
+        "\n\n",
+        "Warning: it is not recommended to change it if you are not sure what it affects.",
+        "\n\n",
+        "Enter the service name you want to use.",
+    ].join("")
+
+    return askText(message, {defaultAnswer: Settings.KEYCHAIN_SERVICE, requireText: true})
 }
 
 
@@ -329,14 +364,26 @@ function askKeepassXCMasterPassword() {
 
         if (response.buttonReturned === removePasswordButton) {
             let noAsCancel = true
-            let message = "The workflow will forget your password. Do you want to continue?"
+            let message = [
+                "The workflow will forget your password. The next time you ",
+                "want to search for KeepassXC records, the workflow will ",
+                "ask you to enter your password again.",
+                "\n\n",
+                "Do you want to continue?",
+            ].join("")
+
             askYesOrNo(message, noAsCancel)
             deletePasswordFromKeychain()
             return ""
         }
     }
 
-    let message = "Enter the password to use KeepassXC database.\nif you don't have the password then press continue."
+    let message = [
+        "Enter the master password for your KeepassXC database. If your ",
+        "database has no password then leave this field blank and ",
+        "press continue.",
+    ].join("")
+
     let userPassword = askText(message, {hideUserInput: true})
 
     addPasswordToKeychain(userPassword)
@@ -363,8 +410,15 @@ function askKeepassXCKeyFilePath() {
 
 function askDesiredAttributes() {
     let availableAttributes = DefaultEnvValues[EnvNames.DESIRED_ATTRIBUTES].replaceAll(" ", "").split(",")
+    let message = [
+        "By default, the workflow shows all attributes of requested records ",
+        "from KeepassXC: title, username, password, url, notes.",
+        "\n\n",
+        "Select the attributes you need.",
+    ].join("")
+
     let attributes = app.chooseFromList(availableAttributes, {
-        withPrompt: "Select the attributes you need",
+        withPrompt: message,
         emptySelectionAllowed: false,
         multipleSelectionsAllowed: true,
         defaultItems: Settings.DESIRED_ATTRIBUTES.replaceAll(" ", "").split(",")
@@ -379,21 +433,38 @@ function askDesiredAttributes() {
 
 
 function askShowPassword() {
-    return askYesOrNo("Show entry passwords in Alfred?")
+    let message = [
+        "By default, no real passwords are displayed for requested record from KeepassXC. ",
+        "They are replaced by special characters.",
+        "\n\n",
+        "Display real passwords?",
+    ].join("")
+
+    return askYesOrNo(message)
 }
 
 
 function askEntryDelimiter() {
-    let message = "Enter the delimiter for entries path."
+    let message = [
+        "If a requested record from KeepassXC is in a directory, it will be displayed as follows:",
+        "\n\n",
+        "directory › record",
+        "\n\n",
+        "You can change the symbol \"›\" to the one you want.",
+    ].join("")
     let currentDelimiter = Settings.ENTRY_DELIMITER
     return askText(message, {defaultAnswer: currentDelimiter, requireText: true})
 }
 
 
 function askAlfredKeyword() {
-    let message = "Enter the keyword name for using it in Alfred."
-    let currentKeyword = Settings.ALFRED_KEYWORD
-    return askText(message, {defaultAnswer: currentKeyword, requireText: true})
+    let message = [
+        "By default \"kp\" is used as the keyword name for this workflow. ",
+        "If the keyword name is already in use by another workflow or if you want to ",
+        "use a different keyword name then change it here.",
+    ].join("")
+
+    return askText(message, {defaultAnswer: Settings.ALFRED_KEYWORD, requireText: true})
 }
 
 

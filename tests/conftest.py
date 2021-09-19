@@ -68,6 +68,7 @@ def valid_settings(settings_factory, keychain_service, keychain_account):
         keychain_service=keychain_service,
         keychain_account=keychain_account,
         entry_delimiter=" > ",
+        desired_attributes="title,username,password",
     )
 
 

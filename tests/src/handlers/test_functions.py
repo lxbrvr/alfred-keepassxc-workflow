@@ -399,43 +399,43 @@ class TestListSettingsHandler(object):
         )
 
         add_item_mock.assert_any_call(
-            title="Keychain account",
+            title="Keychain account name",
             subtitle=valid_settings.KEYCHAIN_ACCOUNT.raw_value,
             arg=valid_settings.KEYCHAIN_ACCOUNT.name,
         )
 
         add_item_mock.assert_any_call(
-            title="Keychain service",
+            title="Keychain service name",
             subtitle=valid_settings.KEYCHAIN_SERVICE.raw_value,
             arg=valid_settings.KEYCHAIN_SERVICE.name,
         )
 
         add_item_mock.assert_any_call(
-            title="Show attribute values in Alfred",
+            title="Display attribute values of KeepassXC records",
             subtitle=cast_bool_to_yesno(valid_settings.SHOW_ATTRIBUTE_VALUES.value),
             arg=valid_settings.SHOW_ATTRIBUTE_VALUES.name,
         )
 
         add_item_mock.assert_any_call(
-            title="Show unfilled attributes in Alfred",
+            title="Display blank attributes of KeepassXC records",
             subtitle=cast_bool_to_yesno(valid_settings.SHOW_UNFILLED_ATTRIBUTES.value),
             arg=valid_settings.SHOW_UNFILLED_ATTRIBUTES.name
         )
 
         add_item_mock.assert_any_call(
-            title="Desired attributes to show in Alfred",
-            subtitle=valid_settings.DESIRED_ATTRIBUTES.raw_value,
+            title="Attributes of KeepassXC records to display",
+            subtitle=valid_settings.DESIRED_ATTRIBUTES.raw_value.replace(",", ", "),
             arg=valid_settings.DESIRED_ATTRIBUTES.name
         )
 
         add_item_mock.assert_any_call(
-            title="Show passwords in Alfred",
+            title="Display real passwords of KeepassXC records",
             subtitle=cast_bool_to_yesno(valid_settings.SHOW_PASSWORDS.value),
             arg=valid_settings.SHOW_PASSWORDS.name,
         )
 
         add_item_mock.assert_any_call(
-            title="KeepassXC entries delimiter",
+            title="Delimiter in KeepassXC records list",
             subtitle=valid_settings.ENTRY_DELIMITER.raw_value,
             arg=valid_settings.ENTRY_DELIMITER.name,
         )

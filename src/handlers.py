@@ -148,31 +148,35 @@ def list_settings_handler(_):  # _ - it's parsed args without usage
     )
 
     script_filter.add_item(
-        title="Show attribute values in Alfred",
+        title="Display attribute values of KeepassXC records",
         subtitle=cast_bool_to_yesno(settings.SHOW_ATTRIBUTE_VALUES.value),
         arg=settings.SHOW_ATTRIBUTE_VALUES.name,
     )
 
     script_filter.add_item(
-        title="Show unfilled attributes in Alfred",
+        title="Display blank attributes of KeepassXC records",
         subtitle=cast_bool_to_yesno(settings.SHOW_UNFILLED_ATTRIBUTES.value),
         arg=settings.SHOW_UNFILLED_ATTRIBUTES.name
     )
 
     script_filter.add_item(
-        title="Desired attributes to show in Alfred",
-        subtitle=settings.DESIRED_ATTRIBUTES.raw_value,
+        title="Attributes of KeepassXC records to display",
+        subtitle=(
+            settings.DESIRED_ATTRIBUTES.raw_value.replace(",", ", ")
+            if settings.DESIRED_ATTRIBUTES.raw_value
+            else settings.DESIRED_ATTRIBUTES.raw_value
+        ),
         arg=settings.DESIRED_ATTRIBUTES.name
     )
 
     script_filter.add_item(
-        title="Show passwords in Alfred",
+        title="Display real passwords of KeepassXC records",
         subtitle=cast_bool_to_yesno(settings.SHOW_PASSWORDS.value),
         arg=settings.SHOW_PASSWORDS.name,
     )
 
     script_filter.add_item(
-        title="KeepassXC entries delimiter",
+        title="Delimiter in KeepassXC records list",
         subtitle=settings.ENTRY_DELIMITER.raw_value,
         arg=settings.ENTRY_DELIMITER.name,
     )
@@ -184,13 +188,13 @@ def list_settings_handler(_):  # _ - it's parsed args without usage
     )
 
     script_filter.add_item(
-        title="Keychain account",
+        title="Keychain account name",
         subtitle=settings.KEYCHAIN_ACCOUNT.raw_value,
         arg=settings.KEYCHAIN_ACCOUNT.name,
     )
 
     script_filter.add_item(
-        title="Keychain service",
+        title="Keychain service name",
         subtitle=settings.KEYCHAIN_SERVICE.raw_value,
         arg=settings.KEYCHAIN_SERVICE.name,
     )
