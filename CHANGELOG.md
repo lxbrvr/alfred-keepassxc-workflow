@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add the ability to manually remove the master password from a keychain.
 - Add automatic removal of the master password from a keychain 
   after using "reset" and "init" commands.
+- Show an error message when trying to configure a master password 
+  without configured a keychain service or keychain account. 
 
 ### Change
 

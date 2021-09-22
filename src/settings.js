@@ -154,6 +154,11 @@ function showMessage(message) {
     })
 }
 
+function showErrorAndExit(message) {
+    showMessage(message)
+    throw CancelError
+}
+
 
 function showDialog(message, actionButtons, withCancelButton=true) {
     let buttons = withCancelButton ? [cancelButton].concat(actionButtons): actionButtons
@@ -210,6 +215,18 @@ function askFile(message, requiredExtension) {
     }
 
     return app.chooseFile(dialogSettings)
+}
+
+
+function showErrorIfThereIsNoAccountOrService() {
+    if (!Settings.KEYCHAIN_ACCOUNT || !Settings.KEYCHAIN_SERVICE) {
+        let message = [
+            "First configure the keychain account name and the keychain service name. ",
+            "This can be changed in the settings."
+        ].join("")
+
+        showErrorAndExit(message)
+    }
 }
 
 
@@ -289,6 +306,8 @@ function askKeychainService() {
  * It should help avoid password leakage.
  */
 function addPasswordToKeychain(password, overwrite=false) {
+    showErrorIfThereIsNoAccountOrService()
+
     let account = Settings.KEYCHAIN_ACCOUNT
     let service = Settings.KEYCHAIN_SERVICE
     let temporaryPasswordEnv = "password"
@@ -355,6 +374,8 @@ function deletePasswordFromKeychain() {
 
 
 function askKeepassXCMasterPassword() {
+    showErrorIfThereIsNoAccountOrService()
+
     if (Settings.KEEPASSXC_MASTER_PASSWORD === maskedPassword) {
         let changePasswordButton = "Change"
         let removePasswordButton = "Remove"
