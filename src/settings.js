@@ -8,6 +8,8 @@ const windowTitle = "Alfred KeepassXC"
 const maskedPassword = "••••••••"
 const alfredWorkflowBundleId = $.getenv("alfred_workflow_bundleid")
 const cancelButton = "Cancel"
+const yesButton = "Yes"
+const noButton = "No"
 
 let CancelError = new Error()
 const cancelErrorNumber = -128 // macos error code for cancel
@@ -142,7 +144,7 @@ function throwCancelErrorIfCancelButton(response) {
 
 
 function convertYesNoToBool(value) {
-    return value === "Yes"
+    return value === yesButton
 }
 
 
@@ -170,13 +172,13 @@ function showDialog(message, actionButtons, withCancelButton=true) {
 
 function askYesOrNo(message, noAsCancel=false) {
     let dialogParameters = {
-        buttons: ["No", "Yes"],
+        buttons: [noButton, yesButton],
         withTitle: windowTitle,
     }
 
     let response = app.displayDialog(message, dialogParameters)
 
-    if (noAsCancel && response.buttonReturned === "No") {
+    if (noAsCancel && response.buttonReturned === noButton) {
         throw CancelError
     }
 
@@ -267,35 +269,43 @@ function askShowUnfilledAttributes() {
 }
 
 
-function askKeychainAccount() {
+function askKeychainData(keychainParameter) {
+    let parameterTextName = keychainParameter === EnvNames.KEYCHAIN_ACCOUNT ? "account name" : "service name"
+    let settingName = keychainParameter === EnvNames.KEYCHAIN_ACCOUNT ? "KEYCHAIN_ACCOUNT" : "KEYCHAIN_SERVICE"
+
     let message = [
         "The workflow saves your KeepassXC master password and some ",
         "parameters into the keychain (password management system in macOS). ",
         "These parameters will be used to search for the master password in ",
-        "the keychain. The account name is one of these parameters.",
+        `the keychain. The ${parameterTextName} is one of these parameters. `,
+        "If there is already a record with a password in the keychain, the ",
+        "record will be deleted after changing this parameter.",
         "\n\n",
         "Warning: it is not recommended to change it if you are not sure what it affects.",
         "\n\n",
-        "Enter the account name you want to use.",
+        `Enter the ${parameterTextName} you want to use.`,
     ].join("")
 
-    return askText(message, {defaultAnswer: Settings.KEYCHAIN_ACCOUNT, requireText: true})
+    let response = askText(message, {defaultAnswer: Settings[settingName], requireText: true})
+    let areThereAccountAndService = Settings.KEYCHAIN_ACCOUNT && Settings.KEYCHAIN_SERVICE
+    let isNewAccountEntered = response !== Settings[settingName]
+
+    if (areThereAccountAndService && isNewAccountEntered && isTherePasswordInKeychain()) {
+        deletePasswordFromKeychain()
+        setEnv(EnvNames.KEEPASSXC_MASTER_PASSWORD, "")
+    }
+
+    return response
+}
+
+
+function askKeychainAccount() {
+    return askKeychainData(EnvNames.KEYCHAIN_ACCOUNT)
 }
 
 
 function askKeychainService() {
-    let message = [
-        "The workflow saves your KeepassXC master password and some ",
-        "parameters into the keychain (password management system in macOS). ",
-        "These parameters will be used to search for the master password in ",
-        "the keychain. The service name is one of these parameters.",
-        "\n\n",
-        "Warning: it is not recommended to change it if you are not sure what it affects.",
-        "\n\n",
-        "Enter the service name you want to use.",
-    ].join("")
-
-    return askText(message, {defaultAnswer: Settings.KEYCHAIN_SERVICE, requireText: true})
+    return askKeychainData(EnvNames.KEYCHAIN_SERVICE)
 }
 
 
@@ -370,6 +380,28 @@ function deletePasswordFromKeychain() {
             throw err
         }
     }
+}
+
+
+function isTherePasswordInKeychain() {
+    showErrorIfThereIsNoAccountOrService()
+    let account = Settings.KEYCHAIN_ACCOUNT
+    let service = Settings.KEYCHAIN_SERVICE
+    let command = `security find-generic-password -a ${account} -s ${service}`
+
+    try {
+        app.doShellScript(command)
+    } catch (err) {
+        let passwordDoesNotExistErrorNumber = 44
+
+        if (err.errorNumber === passwordDoesNotExistErrorNumber) {
+            return false
+        } else if (err.errorNumber > 0) {
+            throw err
+        }
+    }
+
+    return true
 }
 
 

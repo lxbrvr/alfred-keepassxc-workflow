@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   after using "reset" and "init" commands.
 - Show an error message when trying to configure a master password 
   without configured a keychain service or keychain account. 
+- Remove an existing keychain record if the keychain name or the keychain 
+  service name has been changed in the settings.
 
 ### Change
 
