@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remove an existing keychain record if the keychain name or the keychain 
   service name has been changed in the settings.
 
-### Change
+### Changed
 
 - Change the names of the settings to be more informative
 - Improve informativeness in dialog boxes.
