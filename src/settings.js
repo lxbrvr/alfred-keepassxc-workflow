@@ -582,7 +582,7 @@ function init() {
 
     let db = askKeepassXCDBPath()
 
-    let keyfile = askYesOrNo("Do you have a key file") ?
+    let keyfile = askYesOrNo("Do you have a key file?") ?
         askKeepassXCKeyFilePath() :
         DefaultEnvValues[EnvNames.KEEPASSXC_KEYFILE_PATH]
 
