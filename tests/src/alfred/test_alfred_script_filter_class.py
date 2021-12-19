@@ -2,7 +2,7 @@ import sys
 
 import pytest
 
-from alfred import AlfredScriptFilter
+from alfred import AlfredScriptFilter, AlfredMod
 
 
 class TestInitMethod(object):
@@ -23,16 +23,35 @@ class TestAddVariableMethod(object):
 
 class TestAddItemMethod(object):
     @pytest.mark.parametrize(
-        "title, subtitle, is_valid, arg, expected_item",
+        "title, subtitle, is_valid, arg, mods, expected_item",
         [
-            ("a", None, None, None, {"title": "a", "valid": True}),
-            ("a", "b", None, None, {"title": "a", "subtitle": "b", "valid": True}),
-            ("a", "b", False, None, {"title": "a", "subtitle": "b", "valid": False}),
-            ("a", "b", False, "c", {"title": "a", "subtitle": "b", "valid": False, "arg": "c"}),
-            ("a", "b", True, "c", {"title": "a", "subtitle": "b", "valid": True, "arg": "c"}),
+            ("a", None, None, None, None, {"title": "a", "valid": True}),
+            ("a", "b", None, None, None, {"title": "a", "subtitle": "b", "valid": True}),
+            ("a", "b", False, None, None, {"title": "a", "subtitle": "b", "valid": False}),
+            ("a", "b", False, "c", None, {"title": "a", "subtitle": "b", "valid": False, "arg": "c"}),
+            ("a", "b", True, "c", None, {"title": "a", "subtitle": "b", "valid": True, "arg": "c"}),
+            (
+                "a",
+                None,
+                None,
+                None,
+                [AlfredMod(action="cmd", subtitle="s", arg="arg", is_valid=True)],
+                {
+                    "title": "a",
+                    "valid": True,
+                    "mods": {
+                        "cmd": {
+                            "subtitle": "s",
+                            "valid": True,
+                            "arg": "arg",
+                            "variables": {}
+                        }
+                    }
+                }
+            ),
         ]
     )
-    def test_different_incoming_parameters(self, alfred_script_filter, title, subtitle, is_valid, arg, expected_item):
+    def test_different_incoming_parameters(self, alfred_script_filter, title, subtitle, is_valid, arg, mods, expected_item):
         incoming_parameters = {"title": title}
 
         if subtitle:
@@ -43,6 +62,9 @@ class TestAddItemMethod(object):
 
         if arg:
             incoming_parameters["arg"] = arg
+
+        if mods:
+            incoming_parameters["mods"] = mods
 
         alfred_script_filter.add_item(**incoming_parameters)
 
@@ -55,6 +77,18 @@ class TestAddItemMethod(object):
             alfred_script_filter.add_item(title="title")
 
         assert len(alfred_script_filter.items) == expected_number_of_items
+
+    @pytest.mark.parametrize("number_of_items, expected_number_of_items", [(1, 1), (2, 2), (3, 3)])
+    def test_appending_of_multiple_mods(self, alfred_script_filter, number_of_items, expected_number_of_items, mocker):
+        alfred_script_filter.add_item(
+            title="title",
+            subtitle="",
+            is_valid=True,
+            arg="arg",
+            mods=[mocker.Mock() for _ in range(number_of_items)],
+        )
+
+        assert len(alfred_script_filter.items[0].get("mods", {})) == expected_number_of_items
 
 
 class TestSendMethod(object):
@@ -77,7 +111,7 @@ class TestSendMethod(object):
         alfred_script_filter.send()
 
         expected_data = {
-            "items": [{"title": "title"}],
+            "items": [{"title": "title", "mods": mocker.ANY}],
             "variables": {"key": "value"},
         }
 

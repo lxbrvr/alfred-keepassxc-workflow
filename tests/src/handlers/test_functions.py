@@ -4,6 +4,7 @@ from collections import namedtuple
 
 import pytest
 
+from alfred import AlfredMod, AlfredModActionEnum
 from handlers import (
     fetch_handler,
     list_settings_handler,
@@ -145,6 +146,7 @@ class TestFetchHandler(object):
                 is_valid=True,
                 subtitle=getattr(keepassxc_item, expected_title.lower()),
                 arg=expected_title.lower(),
+                mods=mocker.ANY,
             )
 
         add_item_mock.assert_any_call(title="← Back", subtitle="Back to search", arg="back")
@@ -299,6 +301,7 @@ class TestFetchHandler(object):
         assert add_item_mock.call_count == len(expected_add_items) + 1  # 1 is back button
 
         for expected_add_item in expected_add_items:
+            expected_add_item["mods"] = mocker.ANY
             add_item_mock.assert_any_call(**expected_add_item)
 
     @pytest.mark.parametrize(
@@ -323,6 +326,7 @@ class TestFetchHandler(object):
         add_item_mock = mocker.patch("handlers.AlfredScriptFilter.add_item")
         send_mock = mocker.patch("handlers.AlfredScriptFilter.send")
         parsed_args = namedtuple("parsed_args", "query")
+        expected_add_item["mods"] = mocker.ANY
         fetch_handler(parsed_args)
 
         send_mock.assert_called_once()
@@ -349,6 +353,9 @@ class TestFetchHandler(object):
 
         mocker.patch.object(keepassxc_client, "show", return_value=keepassxc_item)
         mocker.patch("handlers.initialize_keepassxc_client", return_value=keepassxc_client)
+        alfred_mod = mocker.patch("handlers.AlfredMod")
+        alfred_mod_instance = alfred_mod.return_value
+
         add_item_mock = mocker.patch("handlers.AlfredScriptFilter.add_item")
         send_mock = mocker.patch("handlers.AlfredScriptFilter.send")
         parsed_args = namedtuple("parsed_args", "query")
@@ -364,7 +371,27 @@ class TestFetchHandler(object):
                 subtitle=expected_subtitle,
                 is_valid=True,
                 arg=keepassxc_item_values,
+                mods=[alfred_mod_instance],
             )
+
+    def test_mod(self, valid_settings, environ_factory, keepassxc_item, keepassxc_client, mocker):
+        environ_factory(desired_attributes="password", show_unfilled_attributes="yes")
+        keepassxc_item.password = "password"
+        mocker.patch.object(keepassxc_client, "show", return_value=keepassxc_item)
+        mocker.patch("handlers.initialize_keepassxc_client", return_value=keepassxc_client)
+        mocker.patch("handlers.AlfredScriptFilter.add_item")
+        mocker.patch("handlers.AlfredScriptFilter.send")
+        mod_mock = mocker.patch("handlers.AlfredMod")
+        mod_instance_mock = mod_mock.return_value
+        parsed_args = namedtuple("parsed_args", "query")
+        fetch_handler(parsed_args)
+
+        mod_mock.assert_called_once_with(
+            action="cmd",
+            subtitle="Copy and paste to front most app.",
+            arg=keepassxc_item.password,
+        )
+        mod_instance_mock.add_variable.assert_called_once_with("USER_ACTION", "mod")
 
 
 class TestListSettingsHandler(object):

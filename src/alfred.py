@@ -2,6 +2,26 @@ import json
 import sys
 
 
+class AlfredModActionEnum(object):
+    CMD = "cmd"
+
+
+class AlfredMod(object):
+    """Class describing the modifier key in Alfred."""
+
+    def __init__(self, action, subtitle, arg, is_valid=True):
+        self.action = action
+        self.is_valid = is_valid
+        self.subtitle = subtitle
+        self.arg = arg
+        self.variables = {}
+
+    def add_variable(self, key, value):
+        """Adds a passed variable to "variables" key for the Alfred's script filter item."""
+
+        self.variables[key] = value
+
+
 class AlfredScriptFilter:
     """Interface for working with the Alfred's script filter."""
 
@@ -14,13 +34,29 @@ class AlfredScriptFilter:
 
         self.variables[key] = value
 
-    def add_item(self, title, subtitle=None, is_valid=True, arg=None):
+    def add_item(self, title, subtitle=None, is_valid=True, arg=None, mods=None):
         """
         Forms item data with specific format for the Alfred's script filter
         and adds to "items" key.
         """
 
-        item = {"title": title, "subtitle": subtitle, "valid": is_valid, "arg": arg}
+        prepared_mods = {
+            i.action: {
+                "subtitle": i.subtitle,
+                "valid": i.is_valid,
+                "arg": i.arg,
+                "variables": i.variables
+            } for i in mods or []
+        } or None
+
+        item = {
+            "title": title,
+            "subtitle": subtitle,
+            "valid": is_valid,
+            "arg": arg,
+            "mods": prepared_mods,
+        }
+
         item = {k: v for k, v in item.iteritems() if v is not None}
         self.items.append(item)
 

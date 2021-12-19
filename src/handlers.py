@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from alfred import AlfredScriptFilter
+from alfred import AlfredScriptFilter, AlfredMod, AlfredModActionEnum
 from conf import settings
 from helpers import cast_bool_to_yesno
 from services import initialize_keepassxc_client
@@ -113,7 +113,9 @@ def fetch_handler(parsed_args):
         title += " (empty)" if kp_entry.is_empty(entry_value) else ""
         subtitle = subtitle if settings.SHOW_ATTRIBUTE_VALUES.value else None
         is_valid = False if kp_entry.is_empty(entry_value) else True
-        script_filter.add_item(title=title, subtitle=subtitle, is_valid=is_valid, arg=entry_value)
+        mod = AlfredMod(action=AlfredModActionEnum.CMD, subtitle="Copy and paste to front most app.", arg=entry_value)
+        mod.add_variable("USER_ACTION", "mod")
+        script_filter.add_item(title=title, subtitle=subtitle, is_valid=is_valid, arg=entry_value, mods=[mod])
 
     script_filter.send()
 
