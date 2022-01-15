@@ -10,17 +10,17 @@ Alfred workflow for fetching KeepassXC entries and coping their attributes.
 
 ## Features
 
-- search KeepassXC entries
-- copy different entry attributes. It includes title, username, password, url, notes
-- comfortable configuration using Alfred's UI and MacOS modal windows
-- there are different settings for displaying KeepassXC data in Alfred.
+- Search KeepassXC entries
+- Copy different entry attributes. It includes title, username, password, url, notes
+- Comfortable configuration using Alfred's UI and MacOS modal windows
+- There are different settings for displaying KeepassXC data in Alfred.
   For example, you can show KeepassXC attributes which you want.
   Or you can hide values displaying for KeepassXC attributes etc. 
   You can know more about it below.
-- it works with KeepassXC key files
-- it saves your KeepassXC master password to OSX Keychain.
-- no dependencies. Only Alfred and KeepassXC.
-- automatically paste entry attributes to front most app with `Command ⌘ + Return ↵`.
+- It works with KeepassXC key files
+- It saves your KeepassXC master password to OSX Keychain.
+- No dependencies. Only Alfred and KeepassXC.
+- Automatically paste entry attributes to front most app with `Command ⌘ + Return ↵`.
 
 ## Installation
 
