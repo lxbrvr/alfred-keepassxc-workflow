@@ -205,18 +205,8 @@ function askText(message, options={}) {
 }
 
 
-function askFile(message, requiredExtension) {
-    let dialogSettings = {
-        withPrompt: message,
-        multipleSelectionsAllowed: false,
-        ofType: [requiredExtension] ? requiredExtension: [],
-    }
-
-    if (requiredExtension) {
-        dialogSettings["ofType"] = [requiredExtension]
-    }
-
-    return app.chooseFile(dialogSettings)
+function askFile(message) {
+    return app.chooseFile({withPrompt: message, multipleSelectionsAllowed: false})
 }
 
 
@@ -233,7 +223,7 @@ function showErrorIfThereIsNoAccountOrService() {
 
 
 function askKeepassXCDBPath() {
-    return askFile("Select KeepassXC database file", "dyn.ah62d4rv4ge8003dcta").toString()
+    return askFile("Select KeepassXC database file").toString()
 }
 
 

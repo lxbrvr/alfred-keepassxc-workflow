@@ -13,7 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Log error to stderr after fail result of security and keepassxc-cli tools. 
+- Log error to stderr after fail result of security and keepassxc-cli tools.
+- Allow choosing a KeepassXC database with any file extension.
 
 ## [1.1.0] - 2021-09-25
 
