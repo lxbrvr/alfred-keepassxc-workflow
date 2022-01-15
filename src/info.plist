@@ -992,7 +992,7 @@
 		<string>show_passwords</string>
 	</array>
 	<key>version</key>
-	<string>1.1.0</string>
+	<string>1.2.0</string>
 	<key>webaddress</key>
 	<string>https://github.com/lxbrvr/alfred-keepassxc-workflow</string>
 </dict>
