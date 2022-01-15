@@ -78,7 +78,7 @@ def search_handler(parsed_args):
     except OSError:
         script_filter.add_item(title="There aren't matches or something went wrong.", is_valid=False)
         script_filter.send()
-        return
+        raise
 
     for entry_path in kp_entries:
         formatted_entry_path = entry_path[1:].replace("/", settings.ENTRY_DELIMITER.value.decode("utf-8"))

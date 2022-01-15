@@ -9,7 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- automatically paste entry attributes to front most app with `Command ⌘ + Return ↵`.
+- Automatically paste entry attributes to front most app with `Command ⌘ + Return ↵`.
+
+### Changed
+
+- Log error to stderr after fail result of security and keepassxc-cli tools. 
 
 ## [1.1.0] - 2021-09-25
 

@@ -82,7 +82,9 @@ class TestSearchHandler(object):
         add_item_mock = mocker.patch("handlers.AlfredScriptFilter.add_item")
         send_mock = mocker.patch("handlers.AlfredScriptFilter.send")
         parsed_args = namedtuple("parsed_args", "query")
-        search_handler(parsed_args)
+
+        with pytest.raises(OSError):
+            search_handler(parsed_args)
 
         add_item_mock.assert_called_with(
             title="There aren't matches or something went wrong.",

@@ -35,7 +35,12 @@ class KeychainAccess(object):
         stdout, stderr = process.communicate()
 
         if process.returncode != 0:
-            raise OSError("Can't fetch a password from keychain")
+            error = (
+                "Can't fetch a password from security tool.\n"
+                "Exit code: {exit_code}.\n"
+                "Output: {output}"
+            )
+            raise OSError(error.format(output=stderr, exit_code=process.returncode))
 
         output = stderr.decode("utf-8")
 
@@ -45,7 +50,7 @@ class KeychainAccess(object):
         matches = re.search(r"password:\s*(?:0x(?P<hex>[0-9A-F]+)\s*)?(?:\"(?P<password>.*)\")?", output)
 
         if not matches:
-            raise OSError("Can't fetch the master password from keychain")
+            raise OSError("Can't parse the master password from output of secure command.")
 
         groups = matches.groupdict()
         password_hex = groups.get('hex')
@@ -90,7 +95,11 @@ class KeepassXCClient(object):
         output, _ = process.communicate()
 
         if process.returncode != 0:
-            raise OSError("Can't fetch data from KeepassXC")
+            error = (
+                "Can't fetch data from keepassxc-cli tool.\n"
+                "Exit code: {exit_code}.\n"
+            )
+            raise OSError(error.format(output=output, exit_code=process.returncode))
 
         return output
 
