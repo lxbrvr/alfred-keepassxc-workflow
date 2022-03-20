@@ -1,3 +1,4 @@
+import typing as t
 import os
 
 from helpers import cast_value_to_bool, split_string_with_commas
@@ -14,13 +15,13 @@ class RequiredFieldException(SettingsException):
 class SettingsAttr:
     """Interface for working with setting attributes."""
 
-    def __init__(self, env_name, cast_to=None, required=False):
+    def __init__(self, env_name: str, cast_to: t.Callable[..., t.Any] = None, required: bool = False) -> None:
         self._env_name = env_name
         self._cast_func = cast_to or str
         self.required = required
 
     @property
-    def value(self):
+    def value(self) -> t.Any:
         """
         Casts a raw value from environment variable to needed value.
         If there is no value in an environment variable or it is empty then
@@ -35,33 +36,35 @@ class SettingsAttr:
         return self._cast_func(raw_value)
 
     @property
-    def raw_value(self):
+    def raw_value(self) -> t.Optional[str]:
         """Returns a value directly from an environment variable."""
 
         return os.getenv(self._env_name)
 
     @property
-    def name(self):
+    def name(self) -> str:
         """Returns a name of environment variable"""
 
         return self._env_name
 
 
 class SettingsMeta(type):
-    def __new__(mcs, name, bases, attributes):
-        cls = super(SettingsMeta, mcs).__new__(mcs, name, bases, attributes)
+    def __new__(mcs: t.Type["SettingsMeta"], name: str, bases: t.Tuple[type, ...], attributes: t.Dict[str, t.Any]) -> "SettingsMeta":
+        cls = super().__new__(mcs, name, bases, attributes)
 
-        cls.fields = []
+        cls.fields = []  # type: ignore
 
         for attr, obj in attributes.items():
             if isinstance(obj, SettingsAttr):
-                cls.fields.append(obj)
+                cls.fields.append(obj)  # type: ignore
 
         return cls
 
 
 class Settings(metaclass=SettingsMeta):
     """Class with global settings"""
+
+    fields: t.List[SettingsAttr]
 
     ALFRED_KEYWORD = SettingsAttr(env_name="alfred_keyword", required=True)
     KEEPASSXC_CLI_PATH = SettingsAttr(env_name="keepassxc_cli_path", required=True)
@@ -76,7 +79,7 @@ class Settings(metaclass=SettingsMeta):
     SHOW_PASSWORDS = SettingsAttr(env_name="show_passwords", cast_to=cast_value_to_bool)
     ENTRY_DELIMITER = SettingsAttr(env_name="entry_delimiter")
 
-    def validate(self):
+    def validate(self) -> None:
         """
         Checks current values in settings fields.
         If it isn't valid then an exception will be raised.
@@ -86,7 +89,7 @@ class Settings(metaclass=SettingsMeta):
             if field.required and field.value is None:
                 raise RequiredFieldException
 
-    def is_valid(self):
+    def is_valid(self) -> bool:
         """
         Checks settings values and returns a boolean value as result.
         Where True is valid settings, False is not.

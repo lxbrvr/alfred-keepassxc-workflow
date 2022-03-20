@@ -1,4 +1,7 @@
-def cast_value_to_bool(value):
+import typing as t
+
+
+def cast_value_to_bool(value: str) -> bool:
     """Casts a passed value to boolean value."""
 
     if isinstance(value, str):
@@ -10,7 +13,7 @@ def cast_value_to_bool(value):
     return False
 
 
-def split_string_with_commas(value):
+def split_string_with_commas(value: str) -> t.List[str]:
     """
     Splits a passed value to a list. The comma is delimiter.
     Note all whitespaces will be removed before the splitting.
@@ -23,7 +26,7 @@ def split_string_with_commas(value):
     return value.replace(" ", "").split(",") if value else []
 
 
-def cast_bool_to_yesno(value):
+def cast_bool_to_yesno(value: bool) -> str:
     """Returns "Yes" if a passed boolean value is True else False."""
 
     return "Yes" if value is True else "No"

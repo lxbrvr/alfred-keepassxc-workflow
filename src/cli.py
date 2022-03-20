@@ -1,3 +1,4 @@
+import typing as t
 import argparse
 import traceback
 
@@ -10,7 +11,7 @@ class CLIActions:
     SETTINGS_LIST = "settings_list"
 
     @classmethod
-    def choices(cls):
+    def choices(cls) -> t.List[str]:
         """Returns an action list."""
 
         return [
@@ -20,7 +21,7 @@ class CLIActions:
         ]
 
 
-def parse_args():
+def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers()
 
@@ -38,7 +39,7 @@ def parse_args():
     return parser.parse_args()
 
 
-def main():
+def main() -> None:
     parsed_args = parse_args()
 
     try:

@@ -1,14 +1,14 @@
 import pytest as pytest
 
-from alfred import AlfredMod
+from alfred import AlfredMod, AlfredModActionEnum
 
 
 class TestInitMethod(object):
     @pytest.mark.parametrize(
         "action, subtitle, arg, is_valid",
         [
-            ("action", "subtitle", "arg", True),
-            ("action", "subtitle", "arg", False),
+            (AlfredModActionEnum.CMD, "subtitle", "arg", True),
+            (AlfredModActionEnum.CMD, "subtitle", "arg", False),
         ]
     )
     def test_initial_data(self, action, subtitle, arg, is_valid):
@@ -23,8 +23,8 @@ class TestInitMethod(object):
 
 class TestAddVariableMethod(object):
     def test_variables_updating(self):
-        incoming_key, incoming_value = 1, 1
-        mod = AlfredMod("", "", "")
+        incoming_key, incoming_value = "key", "value"
+        mod = AlfredMod(AlfredModActionEnum.CMD, "", "")
         mod.add_variable(incoming_key, incoming_value)
 
         assert mod.variables.get(incoming_key) == incoming_value

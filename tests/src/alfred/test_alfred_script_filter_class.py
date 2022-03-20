@@ -2,7 +2,7 @@ import sys
 
 import pytest
 
-from alfred import AlfredScriptFilter, AlfredMod
+from alfred import AlfredScriptFilter, AlfredMod, AlfredModActionEnum
 
 
 class TestInitMethod(object):
@@ -35,7 +35,7 @@ class TestAddItemMethod(object):
                 None,
                 None,
                 None,
-                [AlfredMod(action="cmd", subtitle="s", arg="arg", is_valid=True)],
+                [AlfredMod(action=AlfredModActionEnum.CMD, subtitle="s", arg="arg", is_valid=True)],
                 {
                     "title": "a",
                     "valid": True,

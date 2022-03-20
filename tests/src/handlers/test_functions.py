@@ -1,10 +1,8 @@
-# -*- coding: utf-8 -*-
-
+import argparse
 from collections import namedtuple
 
 import pytest
 
-from alfred import AlfredMod, AlfredModActionEnum
 from handlers import (
     fetch_handler,
     list_settings_handler,
@@ -400,7 +398,7 @@ class TestListSettingsHandler(object):
     def test_added_items(self, mocker, valid_settings):
         add_item_mock = mocker.patch("handlers.AlfredScriptFilter.add_item")
         send_mock = mocker.patch("handlers.AlfredScriptFilter.send")
-        list_settings_handler("it doesn't matter in this case")
+        list_settings_handler(argparse.Namespace())
 
         send_mock.assert_called_once()
         add_item_mock.assert_any_call(

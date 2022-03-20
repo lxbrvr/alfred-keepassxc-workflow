@@ -1,10 +1,8 @@
-# -*- coding: utf-8 -*-
-
 import subprocess
 
 import pytest
 
-from services import KeepassXCClient, KeepassXCItem
+from services import KeepassXCClient
 
 
 class TestInitMethod(object):
@@ -231,9 +229,9 @@ class TestLocateMethod(object):
     @pytest.mark.parametrize(
         "command_output, expected_result",
         [
-            ("entry1\nentry2\n", [u"entry1", u"entry2"]),
-            ("entry1\n", [u"entry1"]),
-            ("запись\n", [u"запись"])
+            ("entry1\nentry2\n", ["entry1", "entry2"]),
+            ("entry1\n", ["entry1"]),
+            ("запись\n", ["запись"])
         ]
     )
     def test_parsing_of_command_output(self, keepassxc_client, mocker, command_output, expected_result):

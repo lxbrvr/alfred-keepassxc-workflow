@@ -1,12 +1,12 @@
-# -*- coding: utf-8 -*-
-
+import argparse
+import typing as t
 from alfred import AlfredScriptFilter, AlfredMod, AlfredModActionEnum
 from conf import settings
 from helpers import cast_bool_to_yesno
 from services import initialize_keepassxc_client
 
 
-def require_password(func):
+def require_password(func: t.Callable[..., None]) -> t.Callable[..., None]:
     """Requires a password.
 
     If there is no password, the missing password notification item will
@@ -33,7 +33,7 @@ def require_password(func):
     return wrapper
 
 
-def validate_settings(func):
+def validate_settings(func: t.Callable[..., None]) -> t.Callable[..., None]:
     """
     Checks settings before a wrapped func calling.
     If there are some errors then it will notify an user.
@@ -64,7 +64,7 @@ def validate_settings(func):
 
 @validate_settings
 @require_password
-def search_handler(parsed_args):
+def search_handler(parsed_args: argparse.Namespace) -> None:
     """
     Forms a list with found KeepassXC entries by a passed query
     and send it to the Alfred's script filter.
@@ -90,7 +90,7 @@ def search_handler(parsed_args):
 
 @validate_settings
 @require_password
-def fetch_handler(parsed_args):
+def fetch_handler(parsed_args: argparse.Namespace) -> None:
     """Forms a list with KeepassXC entry attributes and send it to the Alfred's script filter."""
 
     script_filter = AlfredScriptFilter()
@@ -120,7 +120,7 @@ def fetch_handler(parsed_args):
     script_filter.send()
 
 
-def list_settings_handler(_):  # _ - it's parsed args without usage
+def list_settings_handler(_: argparse.Namespace) -> None:  # _ - it's parsed args without usage
     """Collects a list with global settings and sends it for the Alfred's script filter."""
 
     script_filter = AlfredScriptFilter()

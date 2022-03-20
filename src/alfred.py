@@ -1,3 +1,4 @@
+import typing as t
 import json
 import sys
 
@@ -9,14 +10,14 @@ class AlfredModActionEnum:
 class AlfredMod:
     """Class describing the modifier key in Alfred."""
 
-    def __init__(self, action, subtitle, arg, is_valid=True):
+    def __init__(self, action: AlfredModActionEnum, subtitle: str, arg: str, is_valid: bool = True) -> None:
         self.action = action
         self.is_valid = is_valid
         self.subtitle = subtitle
         self.arg = arg
-        self.variables = {}
+        self.variables: t.Dict[str, str] = {}
 
-    def add_variable(self, key, value):
+    def add_variable(self, key: str, value: str) -> None:
         """Adds a passed variable to "variables" key for the Alfred's script filter item."""
 
         self.variables[key] = value
@@ -25,16 +26,16 @@ class AlfredMod:
 class AlfredScriptFilter:
     """Interface for working with the Alfred's script filter."""
 
-    def __init__(self):
-        self.items = []
-        self.variables = {}
+    def __init__(self) -> None:
+        self.items: t.List[t.Dict[str, t.Any]] = []
+        self.variables: t.Dict[str, str] = {}
 
-    def add_variable(self, key, value):
+    def add_variable(self, key: str, value: str) -> None:
         """Adds a passed variable to "variables" key for the Alfred's script filter."""
 
         self.variables[key] = value
 
-    def add_item(self, title, subtitle=None, is_valid=True, arg=None, mods=None):
+    def add_item(self, title: str, subtitle: t.Optional[str] = None, is_valid: bool = True, arg: t.Optional[str] = None, mods: t.Optional[t.List[AlfredMod]] = None) -> None:
         """
         Forms item data with specific format for the Alfred's script filter
         and adds to "items" key.
@@ -60,13 +61,13 @@ class AlfredScriptFilter:
         item = {k: v for k, v in item.items() if v is not None}
         self.items.append(item)
 
-    def send(self):
+    def send(self) -> None:
         """
         Writes a collected data to stdout as json.
         This output will be parsed by the Alfred's script filter.
         """
 
-        data = {"items": self.items}
+        data: t.Dict[str, t.Any] = {"items": self.items}
 
         if self.variables:
             data["variables"] = self.variables

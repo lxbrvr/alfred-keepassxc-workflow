@@ -1,3 +1,4 @@
+import typing as t
 import binascii
 import re
 import subprocess
@@ -9,7 +10,7 @@ from conf import settings
 class KeepassXCItem:
     """Representations class for a KeepassXC entry. """
 
-    def __init__(self, title, username, password, url, notes):
+    def __init__(self, title: str, username: str, password: str, url: str, notes: str) -> None:
         self.title = title
         self.username = username
         self.password = password
@@ -17,7 +18,7 @@ class KeepassXCItem:
         self.notes = notes
 
     @staticmethod
-    def is_empty(value):
+    def is_empty(value: str) -> bool:
         """Returns True if an entry attribute has the None value or the empty string"""
 
         return value is None or value == ""
@@ -27,7 +28,7 @@ class KeychainAccess:
     """interface for security system command."""
 
     @staticmethod
-    def get_password(account, service):
+    def get_password(account: str, service: str) -> str:
         """Returns a password using "security find-generic-password" command."""
 
         command = ["security", "find-generic-password", "-g", "-a", account, "-s", service]
@@ -64,17 +65,17 @@ class KeychainAccess:
 class KeepassXCClient:
     """Interface for keepassxc-cli system command."""
 
-    def __init__(self, cli_path, db_path, key_file, password):
+    def __init__(self, cli_path: str, db_path: str, key_file: str, password: str) -> None:
         self.cli_path = cli_path
         self.db_path = db_path
         self.key_file = key_file
         self.password = password
 
-    def _normalize_query(self, query):
+    def _normalize_query(self, query: str) -> str:
         query = unicodedata.normalize("NFKC", query)
         return query
 
-    def _build_command(self, action, action_parameters):
+    def _build_command(self, action: str, action_parameters: t.List[str]) -> t.List[str]:
         command = [self.cli_path, action, "-q", self.db_path]
         command += action_parameters
 
@@ -88,7 +89,7 @@ class KeepassXCClient:
 
         return command
 
-    def _run_command(self, command):
+    def _run_command(self, command: t.List[str]) -> str:
         process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, stdin=subprocess.PIPE)
         output, _ = process.communicate(input=self.password.encode())
 
@@ -101,7 +102,7 @@ class KeepassXCClient:
 
         return str(output)
 
-    def show(self, query):
+    def show(self, query: str) -> KeepassXCItem:
         """Handles the system command "keepassxc-cli show"."""
 
         cmd_parameters = "-a title -a username -a password -a url -a notes".split(" ")
@@ -118,7 +119,7 @@ class KeepassXCClient:
             notes="\n".join(entry_data[4:]),
         )
 
-    def locate(self, query):
+    def locate(self, query: str) -> t.List[str]:
         """Handles the system command "keepassxc-cli locate"."""
 
         command = self._build_command(action="locate", action_parameters=[query])
@@ -127,7 +128,7 @@ class KeepassXCClient:
         return output.split("\n")[:-1]  # the latest element is empty string
 
 
-def initialize_keepassxc_client():
+def initialize_keepassxc_client() -> KeepassXCClient:
     """Initializes the KeepassXC client using user settings."""
 
     password = KeychainAccess().get_password(
