@@ -4,7 +4,7 @@ import traceback
 from handlers import fetch_handler, list_settings_handler, search_handler
 
 
-class CLIActions(object):
+class CLIActions:
     SEARCH = "search"
     FETCH = "fetch"
     SETTINGS_LIST = "settings_list"

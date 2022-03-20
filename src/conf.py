@@ -11,7 +11,7 @@ class RequiredFieldException(SettingsException):
     pass
 
 
-class SettingsAttr(object):
+class SettingsAttr:
     """Interface for working with setting attributes."""
 
     def __init__(self, env_name, cast_to=None, required=False):
@@ -53,17 +53,15 @@ class SettingsMeta(type):
 
         cls.fields = []
 
-        for attr, obj in attributes.iteritems():
+        for attr, obj in attributes.items():
             if isinstance(obj, SettingsAttr):
                 cls.fields.append(obj)
 
         return cls
 
 
-class Settings(object):
+class Settings(metaclass=SettingsMeta):
     """Class with global settings"""
-
-    __metaclass__ = SettingsMeta
 
     ALFRED_KEYWORD = SettingsAttr(env_name="alfred_keyword", required=True)
     KEEPASSXC_CLI_PATH = SettingsAttr(env_name="keepassxc_cli_path", required=True)

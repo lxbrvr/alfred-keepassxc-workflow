@@ -5,7 +5,10 @@ import sys
 
 
 def read_plist(plist_dir):
-    return plistlib.readPlist(os.path.join(plist_dir, "info.plist"))
+    info_plist_path = os.path.join(plist_dir, "info.plist")
+
+    with open(info_plist_path, "rb") as info_plist:
+        return plistlib.loads(info_plist.read())
 
 
 def clean_variables_in_plist(plist):
@@ -32,11 +35,14 @@ def add_description_to_plist(plist):
 
 
 def save_plist(plist, source):
-    plistlib.writePlist(plist, os.path.join(source, "info.plist"))
+    info_plist_path = os.path.join(source, "info.plist")
+
+    with open(info_plist_path, "wb") as info_plist:
+        plistlib.dump(plist, info_plist)
 
 
 def ask_for_plist_backup():
-    return raw_input("Environment variables will be removed from info.plist. Continue? (y/N): ")
+    return input("Environment variables will be removed from info.plist. Continue? (y/N): ")
 
 
 def has_to_continue(answer):

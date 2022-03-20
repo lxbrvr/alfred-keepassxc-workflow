@@ -7,8 +7,7 @@
 	<key>connections</key>
 	<dict>
 		<key>3F5B4A74-E524-4ADE-B5FF-1E481FCAB6F5</key>
-		<array>
-		</array>
+		<array/>
 		<key>582F3D94-E0EA-4181-8A7F-BA9C87AC9C08</key>
 		<array>
 			<dict>
@@ -420,7 +419,7 @@
 				<key>runningsubtext</key>
 				<string></string>
 				<key>script</key>
-				<string>/usr/bin/python2 cli.py search "$1"</string>
+				<string>/usr/bin/python3 cli.py search "$1"</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -467,7 +466,7 @@
 				<key>runningsubtext</key>
 				<string></string>
 				<key>script</key>
-				<string>/usr/bin/python2 cli.py fetch "${KP_ITEM_PATH}"</string>
+				<string>/usr/bin/python3 cli.py fetch "${KP_ITEM_PATH}"</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -618,7 +617,7 @@
 				<key>runningsubtext</key>
 				<string></string>
 				<key>script</key>
-				<string>/usr/bin/python2 cli.py settings_list</string>
+				<string>/usr/bin/python3 cli.py settings_list</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>

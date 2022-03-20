@@ -7,7 +7,10 @@ ALFRED_DIRECTORY = os.path.expanduser("~/Library/Application Support/Alfred/Alfr
 
 
 def read_plist(plist_dir):
-    return plistlib.readPlist(os.path.join(plist_dir, "info.plist"))
+    info_plist_path = os.path.join(plist_dir, "info.plist")
+
+    with open(info_plist_path, "rb") as info_plist:
+        return plistlib.loads(info_plist.read())
 
 
 def parse_args():

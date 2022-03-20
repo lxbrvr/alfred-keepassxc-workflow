@@ -1,8 +1,39 @@
-# KeepassXC Alfred
+<div align="center">
+  <h2>KeepassXC Alfred</h2>
+  
+  <p>
+    <img alt="Logo" src="src/icon.png" width=200>
+  </p>
+  
+  <p>Alfred workflow for fetching KeepassXC entries and coping their attributes.</p>
 
-## Description
+  <p>
+    <a href="https://github.com/lxbrvr/alfred-keepassxc-workflow/releases/download/1.2.0/keepassxc-1.2.0.alfredworkflow">Download the latest version (1.2.0)</a>
+  </p>
+</div>
 
-Alfred workflow for fetching KeepassXC entries and coping their attributes.
+---
+
+## Table of contents
+
+- [Demo](#demo)
+- [Features](#features)
+- [Installation](#installation)
+  * [Requirements](#requirements)
+  * [Download and import](#download-and-import)
+- [Using](#using)
+  * [Initialization](#initialization)
+  * [Search KeepassXC entries](#search-keepassxc-entries)
+  * [Reset settings](#reset-settings)
+  * [Settings](#settings)
+- [Development](#development)
+  * [The first initialization](#the-first-initialization)
+  * [Testing](#testing)
+  * [Prepare info.plist](#prepare-infoplist)
+  * [Build](#build)
+  * [Other commands](#other-commands)
+
+---
 
 ## Demo
 
@@ -26,10 +57,9 @@ Alfred workflow for fetching KeepassXC entries and coping their attributes.
 
 ### Requirements
 
-You need to have the following libraries:
-
 - Alfred 4+
 - KeepassXC
+- Monterey 12.3+ 
 
 ### Download and import
 

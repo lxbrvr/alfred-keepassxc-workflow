@@ -1,5 +1,5 @@
 import pytest
-from contextlib2 import ExitStack
+from contextlib import ExitStack
 
 from conf import RequiredFieldException
 

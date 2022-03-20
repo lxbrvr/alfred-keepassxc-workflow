@@ -41,7 +41,7 @@ def alfred_script_filter():
 @pytest.fixture
 def environ_factory(mocker):
     def create(**kw):
-        mocker.patch.dict("conf.os.environ", {k: v for k, v in kw.iteritems() if v is not None})
+        mocker.patch.dict("conf.os.environ", {k: v for k, v in kw.items() if v is not None})
     yield create
 
 

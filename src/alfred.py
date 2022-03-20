@@ -2,11 +2,11 @@ import json
 import sys
 
 
-class AlfredModActionEnum(object):
+class AlfredModActionEnum:
     CMD = "cmd"
 
 
-class AlfredMod(object):
+class AlfredMod:
     """Class describing the modifier key in Alfred."""
 
     def __init__(self, action, subtitle, arg, is_valid=True):
@@ -57,7 +57,7 @@ class AlfredScriptFilter:
             "mods": prepared_mods,
         }
 
-        item = {k: v for k, v in item.iteritems() if v is not None}
+        item = {k: v for k, v in item.items() if v is not None}
         self.items.append(item)
 
     def send(self):

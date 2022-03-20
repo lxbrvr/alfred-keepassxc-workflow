@@ -6,7 +6,7 @@ import unicodedata
 from conf import settings
 
 
-class KeepassXCItem(object):
+class KeepassXCItem:
     """Representations class for a KeepassXC entry. """
 
     def __init__(self, title, username, password, url, notes):
@@ -23,7 +23,7 @@ class KeepassXCItem(object):
         return value is None or value == ""
 
 
-class KeychainAccess(object):
+class KeychainAccess:
     """interface for security system command."""
 
     @staticmethod
@@ -44,8 +44,8 @@ class KeychainAccess(object):
 
         output = stderr.decode("utf-8")
 
-        if output == 'password: \n':  # there is no password
-            return u''
+        if output == "password: \n":  # there is no password
+            return ""
 
         matches = re.search(r"password:\s*(?:0x(?P<hex>[0-9A-F]+)\s*)?(?:\"(?P<password>.*)\")?", output)
 
@@ -53,15 +53,15 @@ class KeychainAccess(object):
             raise OSError("Can't parse the master password from output of secure command.")
 
         groups = matches.groupdict()
-        password_hex = groups.get('hex')
+        password_hex = groups.get("hex")
 
         if password_hex:
-            return unicode(binascii.unhexlify(password_hex), 'utf-8')
+            return binascii.unhexlify(password_hex).decode("utf-8")
 
-        return groups.get('password')
+        return groups.get("password", "")
 
 
-class KeepassXCClient(object):
+class KeepassXCClient:
     """Interface for keepassxc-cli system command."""
 
     def __init__(self, cli_path, db_path, key_file, password):
@@ -71,7 +71,6 @@ class KeepassXCClient(object):
         self.password = password
 
     def _normalize_query(self, query):
-        query = query.decode("utf-8")
         query = unicodedata.normalize("NFKC", query)
         return query
 
@@ -91,8 +90,7 @@ class KeepassXCClient(object):
 
     def _run_command(self, command):
         process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, stdin=subprocess.PIPE)
-        process.stdin.write(self.password)
-        output, _ = process.communicate()
+        output, _ = process.communicate(input=self.password.encode())
 
         if process.returncode != 0:
             error = (
@@ -101,7 +99,7 @@ class KeepassXCClient(object):
             )
             raise OSError(error.format(output=output, exit_code=process.returncode))
 
-        return output
+        return str(output)
 
     def show(self, query):
         """Handles the system command "keepassxc-cli show"."""
@@ -110,7 +108,7 @@ class KeepassXCClient(object):
         cmd_parameters += [query]
         command = self._build_command(action="show", action_parameters=cmd_parameters)
         output = self._run_command(command)
-        entry_data = output.decode("utf-8")[:-1].split("\n")  # the latest element is break line
+        entry_data = output[:-1].split("\n")  # the latest element is break line
 
         return KeepassXCItem(
             title=entry_data[0],
@@ -126,7 +124,7 @@ class KeepassXCClient(object):
         command = self._build_command(action="locate", action_parameters=[query])
         output = self._run_command(command)
 
-        return output.decode("utf-8").split("\n")[:-1]  # the latest element is empty string
+        return output.split("\n")[:-1]  # the latest element is empty string
 
 
 def initialize_keepassxc_client():

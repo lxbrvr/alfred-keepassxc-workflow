@@ -81,7 +81,7 @@ def search_handler(parsed_args):
         raise
 
     for entry_path in kp_entries:
-        formatted_entry_path = entry_path[1:].replace("/", settings.ENTRY_DELIMITER.value.decode("utf-8"))
+        formatted_entry_path = entry_path[1:].replace("/", settings.ENTRY_DELIMITER.value)
         script_filter.add_item(title=formatted_entry_path, arg=entry_path)
 
     script_filter.add_variable("USER_QUERY", parsed_args.query)  # used for "back" button
