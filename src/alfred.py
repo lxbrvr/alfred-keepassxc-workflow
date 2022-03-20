@@ -1,6 +1,6 @@
-import typing as t
 import json
 import sys
+import typing as t
 
 
 class AlfredModActionEnum:
@@ -35,19 +35,22 @@ class AlfredScriptFilter:
 
         self.variables[key] = value
 
-    def add_item(self, title: str, subtitle: t.Optional[str] = None, is_valid: bool = True, arg: t.Optional[str] = None, mods: t.Optional[t.List[AlfredMod]] = None) -> None:
+    def add_item(
+        self,
+        title: str,
+        subtitle: t.Optional[str] = None,
+        is_valid: bool = True,
+        arg: t.Optional[str] = None,
+        mods: t.Optional[t.List[AlfredMod]] = None,
+    ) -> None:
         """
         Forms item data with specific format for the Alfred's script filter
         and adds to "items" key.
         """
 
         prepared_mods = {
-            i.action: {
-                "subtitle": i.subtitle,
-                "valid": i.is_valid,
-                "arg": i.arg,
-                "variables": i.variables
-            } for i in mods or []
+            i.action: {"subtitle": i.subtitle, "valid": i.is_valid, "arg": i.arg, "variables": i.variables}
+            for i in mods or []
         } or None
 
         item = {

@@ -9,7 +9,7 @@ class TestInitMethod(object):
         [
             (AlfredModActionEnum.CMD, "subtitle", "arg", True),
             (AlfredModActionEnum.CMD, "subtitle", "arg", False),
-        ]
+        ],
     )
     def test_initial_data(self, action, subtitle, arg, is_valid):
         mod = AlfredMod(action=action, is_valid=is_valid, subtitle=subtitle, arg=arg)

@@ -1,14 +1,14 @@
-import typing as t
 import binascii
 import re
 import subprocess
+import typing as t
 import unicodedata
 
 from conf import settings
 
 
 class KeepassXCItem:
-    """Representations class for a KeepassXC entry. """
+    """Representations class for a KeepassXC entry."""
 
     def __init__(self, title: str, username: str, password: str, url: str, notes: str) -> None:
         self.title = title
@@ -36,11 +36,7 @@ class KeychainAccess:
         stdout, stderr = process.communicate()
 
         if process.returncode != 0:
-            error = (
-                "Can't fetch a password from security tool.\n"
-                "Exit code: {exit_code}.\n"
-                "Output: {output}"
-            )
+            error = "Can't fetch a password from security tool.\nExit code: {exit_code}.\nOutput: {output}"
             raise OSError(error.format(output=stderr, exit_code=process.returncode))
 
         output = stderr.decode("utf-8")
@@ -94,10 +90,7 @@ class KeepassXCClient:
         output, _ = process.communicate(input=self.password.encode())
 
         if process.returncode != 0:
-            error = (
-                "Can't fetch data from keepassxc-cli tool.\n"
-                "Exit code: {exit_code}.\n"
-            )
+            error = "Can't fetch data from keepassxc-cli tool.\nExit code: {exit_code}.\n"
             raise OSError(error.format(output=output, exit_code=process.returncode))
 
         return str(output)

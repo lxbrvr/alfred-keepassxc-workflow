@@ -1,6 +1,7 @@
 import argparse
 import typing as t
-from alfred import AlfredScriptFilter, AlfredMod, AlfredModActionEnum
+
+from alfred import AlfredMod, AlfredModActionEnum, AlfredScriptFilter
 from conf import settings
 from helpers import cast_bool_to_yesno
 from services import initialize_keepassxc_client
@@ -52,9 +53,7 @@ def validate_settings(func: t.Callable[..., None]) -> t.Callable[..., None]:
         )
 
         script_filter.add_item(
-            title="Express initialization",
-            subtitle="Press to go to express initialization",
-            arg="express"
+            title="Express initialization", subtitle="Press to go to express initialization", arg="express"
         )
 
         script_filter.send()
@@ -158,7 +157,7 @@ def list_settings_handler(_: argparse.Namespace) -> None:  # _ - it's parsed arg
     script_filter.add_item(
         title="Display blank attributes of KeepassXC records",
         subtitle=cast_bool_to_yesno(settings.SHOW_UNFILLED_ATTRIBUTES.value),
-        arg=settings.SHOW_UNFILLED_ATTRIBUTES.name
+        arg=settings.SHOW_UNFILLED_ATTRIBUTES.name,
     )
 
     script_filter.add_item(
@@ -168,7 +167,7 @@ def list_settings_handler(_: argparse.Namespace) -> None:  # _ - it's parsed arg
             if settings.DESIRED_ATTRIBUTES.raw_value
             else settings.DESIRED_ATTRIBUTES.raw_value
         ),
-        arg=settings.DESIRED_ATTRIBUTES.name
+        arg=settings.DESIRED_ATTRIBUTES.name,
     )
 
     script_filter.add_item(

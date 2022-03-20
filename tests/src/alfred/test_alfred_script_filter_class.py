@@ -2,7 +2,7 @@ import sys
 
 import pytest
 
-from alfred import AlfredScriptFilter, AlfredMod, AlfredModActionEnum
+from alfred import AlfredMod, AlfredModActionEnum, AlfredScriptFilter
 
 
 class TestInitMethod(object):
@@ -39,19 +39,14 @@ class TestAddItemMethod(object):
                 {
                     "title": "a",
                     "valid": True,
-                    "mods": {
-                        "cmd": {
-                            "subtitle": "s",
-                            "valid": True,
-                            "arg": "arg",
-                            "variables": {}
-                        }
-                    }
-                }
+                    "mods": {"cmd": {"subtitle": "s", "valid": True, "arg": "arg", "variables": {}}},
+                },
             ),
-        ]
+        ],
     )
-    def test_different_incoming_parameters(self, alfred_script_filter, title, subtitle, is_valid, arg, mods, expected_item):
+    def test_different_incoming_parameters(
+        self, alfred_script_filter, title, subtitle, is_valid, arg, mods, expected_item
+    ):
         incoming_parameters = {"title": title}
 
         if subtitle:

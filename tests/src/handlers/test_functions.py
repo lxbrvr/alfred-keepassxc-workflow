@@ -6,9 +6,9 @@ import pytest
 from handlers import (
     fetch_handler,
     list_settings_handler,
+    require_password,
     search_handler,
     validate_settings,
-    require_password,
 )
 from helpers import cast_bool_to_yesno
 
@@ -31,9 +31,7 @@ class TestValidateSettingsDecorator(object):
         )
 
         add_item_mock.assert_any_call(
-            title="Express initialization",
-            subtitle="Press to go to express initialization",
-            arg="express"
+            title="Express initialization", subtitle="Press to go to express initialization", arg="express"
         )
 
         assert add_item_mock.call_count == 2
@@ -96,9 +94,11 @@ class TestSearchHandler(object):
             ("/dir1/dir2/entry", "dir1{delimiter}dir2{delimiter}entry", "/dir1/dir2/entry"),
             ("/entry", "entry", "/entry"),
             ("/dir1/entry", "dir1{delimiter}entry", "/dir1/entry"),
-        ]
+        ],
     )
-    def test_success_output(self, mocker, environ_factory, valid_settings, keepassxc_client, kp_output, expected_title, expected_arg):
+    def test_success_output(
+        self, mocker, environ_factory, valid_settings, keepassxc_client, kp_output, expected_title, expected_arg
+    ):
         environ_factory(entry_delimiter=" > ")
         mocker.patch.object(keepassxc_client, "locate", return_value=[kp_output])
         mocker.patch("handlers.initialize_keepassxc_client", return_value=keepassxc_client)
@@ -108,7 +108,9 @@ class TestSearchHandler(object):
         parsed_args = namedtuple("parsed_args", "query")
         search_handler(parsed_args)
 
-        add_item_mock.assert_called_with(title=expected_title.format(delimiter=valid_settings.ENTRY_DELIMITER.value), arg=expected_arg)
+        add_item_mock.assert_called_with(
+            title=expected_title.format(delimiter=valid_settings.ENTRY_DELIMITER.value), arg=expected_arg
+        )
         send_mock.assert_called_once()
         add_variable_mock.assert_called_with("USER_QUERY", parsed_args.query)
 
@@ -121,10 +123,19 @@ class TestFetchHandler(object):
             ("title,username", ["Title", "Username"]),
             ("title,username,password", ["Title", "Username", "Password"]),
             ("title,username,password,url", ["Title", "Username", "Password", "Url"]),
-            ("title,username,password,url,notes", ["Title", "Username", "Password", "Url", "Notes"])
+            ("title,username,password,url,notes", ["Title", "Username", "Password", "Url", "Notes"]),
         ],
     )
-    def test_desired_attributes(self, mocker, valid_settings, expected_added_item_titles, keepassxc_client, environ_factory, desired_attributes, keepassxc_item):
+    def test_desired_attributes(
+        self,
+        mocker,
+        valid_settings,
+        expected_added_item_titles,
+        keepassxc_client,
+        environ_factory,
+        desired_attributes,
+        keepassxc_item,
+    ):
         environ_factory(
             desired_attributes=desired_attributes,
             show_attribute_values="yes",
@@ -164,7 +175,7 @@ class TestFetchHandler(object):
                     {"title": "Password", "subtitle": "value", "is_valid": True, "arg": "value"},
                     {"title": "Url", "subtitle": "value", "is_valid": True, "arg": "value"},
                     {"title": "Notes", "subtitle": "value", "is_valid": True, "arg": "value"},
-                ]
+                ],
             ),
             (
                 "no",
@@ -174,7 +185,7 @@ class TestFetchHandler(object):
                     {"title": "Password", "subtitle": "value", "is_valid": True, "arg": "value"},
                     {"title": "Url", "subtitle": "value", "is_valid": True, "arg": "value"},
                     {"title": "Notes", "subtitle": "value", "is_valid": True, "arg": "value"},
-                ]
+                ],
             ),
             (
                 "no",
@@ -183,7 +194,7 @@ class TestFetchHandler(object):
                     {"title": "Password", "subtitle": "value", "is_valid": True, "arg": "value"},
                     {"title": "Url", "subtitle": "value", "is_valid": True, "arg": "value"},
                     {"title": "Notes", "subtitle": "value", "is_valid": True, "arg": "value"},
-                ]
+                ],
             ),
             (
                 "no",
@@ -191,20 +202,16 @@ class TestFetchHandler(object):
                 [
                     {"title": "Url", "subtitle": "value", "is_valid": True, "arg": "value"},
                     {"title": "Notes", "subtitle": "value", "is_valid": True, "arg": "value"},
-                ]
+                ],
             ),
             (
                 "no",
                 ["title", "username", "password", "url"],
                 [
                     {"title": "Notes", "subtitle": "value", "is_valid": True, "arg": "value"},
-                ]
+                ],
             ),
-            (
-                "no",
-                ["title", "username", "password", "url", "notes"],
-                []
-            ),
+            ("no", ["title", "username", "password", "url", "notes"], []),
             (
                 "yes",
                 [],
@@ -214,7 +221,7 @@ class TestFetchHandler(object):
                     {"title": "Password", "subtitle": "value", "is_valid": True, "arg": "value"},
                     {"title": "Url", "subtitle": "value", "is_valid": True, "arg": "value"},
                     {"title": "Notes", "subtitle": "value", "is_valid": True, "arg": "value"},
-                ]
+                ],
             ),
             (
                 "yes",
@@ -225,7 +232,7 @@ class TestFetchHandler(object):
                     {"title": "Password", "subtitle": "value", "is_valid": True, "arg": "value"},
                     {"title": "Url", "subtitle": "value", "is_valid": True, "arg": "value"},
                     {"title": "Notes", "subtitle": "value", "is_valid": True, "arg": "value"},
-                ]
+                ],
             ),
             (
                 "yes",
@@ -236,7 +243,7 @@ class TestFetchHandler(object):
                     {"title": "Password", "subtitle": "value", "is_valid": True, "arg": "value"},
                     {"title": "Url", "subtitle": "value", "is_valid": True, "arg": "value"},
                     {"title": "Notes", "subtitle": "value", "is_valid": True, "arg": "value"},
-                ]
+                ],
             ),
             (
                 "yes",
@@ -247,7 +254,7 @@ class TestFetchHandler(object):
                     {"title": "Password (empty)", "subtitle": None, "is_valid": False, "arg": None},
                     {"title": "Url", "subtitle": "value", "is_valid": True, "arg": "value"},
                     {"title": "Notes", "subtitle": "value", "is_valid": True, "arg": "value"},
-                ]
+                ],
             ),
             (
                 "yes",
@@ -258,7 +265,7 @@ class TestFetchHandler(object):
                     {"title": "Password (empty)", "subtitle": None, "is_valid": False, "arg": None},
                     {"title": "Url (empty)", "subtitle": None, "is_valid": False, "arg": None},
                     {"title": "Notes", "subtitle": "value", "is_valid": True, "arg": "value"},
-                ]
+                ],
             ),
             (
                 "yes",
@@ -269,11 +276,21 @@ class TestFetchHandler(object):
                     {"title": "Password (empty)", "subtitle": None, "is_valid": False, "arg": None},
                     {"title": "Url (empty)", "subtitle": None, "is_valid": False, "arg": None},
                     {"title": "Notes (empty)", "subtitle": None, "is_valid": False, "arg": None},
-                ]
+                ],
             ),
-        ]
+        ],
     )
-    def test_show_unfilled_attributes(self, mocker, valid_settings, environ_factory, keepassxc_client, keepassxc_item, show_unfilled_attributes, empty_attributes, expected_add_items):
+    def test_show_unfilled_attributes(
+        self,
+        mocker,
+        valid_settings,
+        environ_factory,
+        keepassxc_client,
+        keepassxc_item,
+        show_unfilled_attributes,
+        empty_attributes,
+        expected_add_items,
+    ):
         environ_factory(
             desired_attributes="title,username,password,url,notes",
             show_attribute_values="yes",
@@ -309,9 +326,19 @@ class TestFetchHandler(object):
         [
             ("yes", "password", {"title": "Password", "subtitle": "password", "is_valid": True, "arg": "password"}),
             ("no", "password", {"title": "Password", "subtitle": "••••••••", "is_valid": True, "arg": "password"}),
-        ]
+        ],
     )
-    def test_show_password(self, mocker, valid_settings, environ_factory, keepassxc_client, keepassxc_item, show_password, password, expected_add_item):
+    def test_show_password(
+        self,
+        mocker,
+        valid_settings,
+        environ_factory,
+        keepassxc_client,
+        keepassxc_item,
+        show_password,
+        password,
+        expected_add_item,
+    ):
         environ_factory(
             desired_attributes="password",
             show_attribute_values="yes",
@@ -334,11 +361,17 @@ class TestFetchHandler(object):
         assert add_item_mock.call_count == 2  # 1 is back button
         add_item_mock.assert_any_call(**expected_add_item)
 
-    @pytest.mark.parametrize(
-        "show_attribute_values, expected_subtitle",
-        [("yes", "value"), ("no", None)]
-    )
-    def test_show_attribute_value(self, mocker, valid_settings, environ_factory, keepassxc_client, keepassxc_item, expected_subtitle, show_attribute_values):
+    @pytest.mark.parametrize("show_attribute_values, expected_subtitle", [("yes", "value"), ("no", None)])
+    def test_show_attribute_value(
+        self,
+        mocker,
+        valid_settings,
+        environ_factory,
+        keepassxc_client,
+        keepassxc_item,
+        expected_subtitle,
+        show_attribute_values,
+    ):
         environ_factory(
             desired_attributes="title,username,password,url,notes",
             show_attribute_values=show_attribute_values,
@@ -446,13 +479,13 @@ class TestListSettingsHandler(object):
         add_item_mock.assert_any_call(
             title="Display blank attributes of KeepassXC records",
             subtitle=cast_bool_to_yesno(valid_settings.SHOW_UNFILLED_ATTRIBUTES.value),
-            arg=valid_settings.SHOW_UNFILLED_ATTRIBUTES.name
+            arg=valid_settings.SHOW_UNFILLED_ATTRIBUTES.name,
         )
 
         add_item_mock.assert_any_call(
             title="Attributes of KeepassXC records to display",
             subtitle=valid_settings.DESIRED_ATTRIBUTES.raw_value.replace(",", ", "),
-            arg=valid_settings.DESIRED_ATTRIBUTES.name
+            arg=valid_settings.DESIRED_ATTRIBUTES.name,
         )
 
         add_item_mock.assert_any_call(

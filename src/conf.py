@@ -1,5 +1,5 @@
-import typing as t
 import os
+import typing as t
 
 from helpers import cast_value_to_bool, split_string_with_commas
 
@@ -49,7 +49,9 @@ class SettingsAttr:
 
 
 class SettingsMeta(type):
-    def __new__(mcs: t.Type["SettingsMeta"], name: str, bases: t.Tuple[type, ...], attributes: t.Dict[str, t.Any]) -> "SettingsMeta":
+    def __new__(
+        mcs: t.Type["SettingsMeta"], name: str, bases: t.Tuple[type, ...], attributes: t.Dict[str, t.Any]
+    ) -> "SettingsMeta":
         cls = super().__new__(mcs, name, bases, attributes)
 
         cls.fields = []  # type: ignore

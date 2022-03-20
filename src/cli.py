@@ -1,6 +1,6 @@
-import typing as t
 import argparse
 import traceback
+import typing as t
 
 from handlers import fetch_handler, list_settings_handler, search_handler
 

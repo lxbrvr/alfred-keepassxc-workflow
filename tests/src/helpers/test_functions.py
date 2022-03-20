@@ -18,7 +18,7 @@ class TestCastValueToBool(object):
             (1, False),
             (False, False),
             ("something", False),
-        ]
+        ],
     )
     def test(self, incoming_value, expected_boolean):
         actual_boolean = cast_value_to_bool(incoming_value)
@@ -33,7 +33,7 @@ class TestSplitStringWithCommas(object):
             (" a, b ,  c ", ["a", "b", "c"]),
             ("abc", ["abc"]),
             ("", []),
-        ]
+        ],
     )
     def test(self, incoming_value, expected_list):
         actual_list = split_string_with_commas(incoming_value)

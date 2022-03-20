@@ -42,6 +42,7 @@ def alfred_script_filter():
 def environ_factory(mocker):
     def create(**kw):
         mocker.patch.dict("conf.os.environ", {k: v for k, v in kw.items() if v is not None})
+
     yield create
 
 
@@ -50,6 +51,7 @@ def settings_factory(environ_factory):
     def create(**kw):
         environ_factory(**kw)
         return Settings()
+
     yield create
 
 

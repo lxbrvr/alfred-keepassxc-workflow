@@ -38,7 +38,7 @@ class TestBuildCommandMethod(object):
             (None, "password", [], ["cli", "action", "-q", "db_path"]),
             ("key_file", "password", [], ["cli", "action", "-q", "db_path", "-k", "key_file"]),
             ("key_file", "password", ["parameter"], ["cli", "action", "-q", "db_path", "parameter", "-k", "key_file"]),
-        ]
+        ],
     )
     def test_command_building(self, key_file, password, action_parameters, expected_command):
         client = KeepassXCClient(
@@ -183,7 +183,7 @@ class TestShowMethod(object):
                 "",
                 "this\nis\nnotes",
             ),
-        ]
+        ],
     )
     def test_parsing_of_command_output(
         self,
@@ -228,11 +228,7 @@ class TestLocateMethod(object):
 
     @pytest.mark.parametrize(
         "command_output, expected_result",
-        [
-            ("entry1\nentry2\n", ["entry1", "entry2"]),
-            ("entry1\n", ["entry1"]),
-            ("запись\n", ["запись"])
-        ]
+        [("entry1\nentry2\n", ["entry1", "entry2"]), ("entry1\n", ["entry1"]), ("запись\n", ["запись"])],
     )
     def test_parsing_of_command_output(self, keepassxc_client, mocker, command_output, expected_result):
         mocker.patch.object(keepassxc_client, "_build_command")

@@ -1,5 +1,6 @@
-import pytest
 from contextlib import ExitStack
+
+import pytest
 
 from conf import RequiredFieldException
 
@@ -10,7 +11,7 @@ class TestIsValidMethod(object):
         [
             (RequiredFieldException, False),
             (lambda: None, True),
-        ]
+        ],
     )
     def test(self, raised_exception, expected_result, settings_factory, mocker):
         settings = settings_factory()
@@ -29,7 +30,7 @@ class TestValidateMethod(object):
             ("1", "1", "1", None, None, pytest.raises(RequiredFieldException)),
             ("1", "1", "1", "1", None, pytest.raises(RequiredFieldException)),
             ("1", "1", "1", "1", "1", ExitStack()),
-        ]
+        ],
     )
     def test_required_attributes(
         self,

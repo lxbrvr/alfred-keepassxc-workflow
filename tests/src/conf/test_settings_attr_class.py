@@ -10,7 +10,7 @@ class TestInitMethod(object):
             ("env", None, False, "env", str, False),
             ("env", int, False, "env", int, False),
             ("env", None, True, "env", str, True),
-        ]
+        ],
     )
     def test_attributes_assigning(
         self,

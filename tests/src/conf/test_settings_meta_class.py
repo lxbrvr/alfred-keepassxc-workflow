@@ -10,7 +10,7 @@ class TestNewMethod(object):
             {
                 "settings_attr": expected_settings_attr,
                 "another_attr": "some_value",
-            }
+            },
         )
 
         assert cls.fields == [expected_settings_attr]

@@ -31,11 +31,21 @@ latest-version:
 	@git fetch && git describe --tags --abbrev=0
 
 beautify:
-	@isort \
+	autoflake \
+		-r \
+		--in-place \
+		--remove-all-unused-imports \
+		--ignore-init-module-imports \
+		--exclude=git \
+		-v \
+		src tests && \
+	black \
+		 --line-length 120 \
+		 --exclude __pycache__ \
+		 src tests && \
+	isort \
 		-m 3 \
-		--apply \
-		--recursive \
-		--lines=79 \
+		--line-length=79 \
 		--trailing-comma \
 		src tests
 

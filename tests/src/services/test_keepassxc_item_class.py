@@ -27,7 +27,7 @@ class TestIsEmptyMethod(object):
             (None, True),
             ("", True),
             ("data", False),
-        ]
+        ],
     )
     def test_is_empty(self, keepassxc_item, value, is_empty):
         assert keepassxc_item.is_empty(value) == is_empty
