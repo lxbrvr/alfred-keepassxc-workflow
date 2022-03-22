@@ -1,7 +1,7 @@
 from conf import SettingsAttr, SettingsMeta
 
 
-class TestNewMethod(object):
+class TestNewMethod:
     def test_attributes(self):
         expected_settings_attr = SettingsAttr(env_name="some_env")
         cls = SettingsMeta(

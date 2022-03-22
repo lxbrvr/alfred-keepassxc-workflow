@@ -3,7 +3,7 @@ import pytest
 from conf import SettingsAttr
 
 
-class TestInitMethod(object):
+class TestInitMethod:
     @pytest.mark.parametrize(
         "incoming_env_name, incoming_cast_to, incoming_required, expected_env_name, expected_cast_to, expected_required",
         [
@@ -32,7 +32,7 @@ class TestInitMethod(object):
         assert settings_attr.required == expected_required
 
 
-class TestValueProperty(object):
+class TestValueProperty:
     def test_when_there_is_empty_string_in_env(self, environ_factory):
         environ_factory(env="")
         settings_attr = SettingsAttr(env_name="env")
@@ -52,7 +52,7 @@ class TestValueProperty(object):
         cast_func_mock.assert_called_once()
 
 
-class TestRawValueProperty(object):
+class TestRawValueProperty:
     def test_calling_os_getenv(self, mocker):
         getenv_mock = mocker.patch("conf.os.getenv")
         settings_attr = SettingsAttr(env_name="some_env")
@@ -68,7 +68,7 @@ class TestRawValueProperty(object):
         assert setting_attr.raw_value == env_value
 
 
-class TestNameProperty(object):
+class TestNameProperty:
     def test_result_value(self):
         env_value = "value"
         settings_attr = SettingsAttr(env_name=env_value)

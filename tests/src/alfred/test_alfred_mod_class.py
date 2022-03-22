@@ -3,7 +3,7 @@ import pytest as pytest
 from alfred import AlfredMod, AlfredModActionEnum
 
 
-class TestInitMethod(object):
+class TestInitMethod:
     @pytest.mark.parametrize(
         "action, subtitle, arg, is_valid",
         [
@@ -21,7 +21,7 @@ class TestInitMethod(object):
         assert mod.variables == {}
 
 
-class TestAddVariableMethod(object):
+class TestAddVariableMethod:
     def test_variables_updating(self):
         incoming_key, incoming_value = "key", "value"
         mod = AlfredMod(AlfredModActionEnum.CMD, "", "")

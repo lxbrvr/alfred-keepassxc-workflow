@@ -5,7 +5,7 @@ import pytest
 from services import KeepassXCClient
 
 
-class TestInitMethod(object):
+class TestInitMethod:
     def test_attributes(self):
         cli_path = "cli_path"
         db_path = "db_path"
@@ -25,12 +25,12 @@ class TestInitMethod(object):
         assert client.password == password
 
 
-class TestNormalizeQueryMethod(object):
+class TestNormalizeQueryMethod:
     def test_normalization(self):
         pass
 
 
-class TestBuildCommandMethod(object):
+class TestBuildCommandMethod:
     @pytest.mark.parametrize(
         "key_file, password, action_parameters, expected_command",
         [
@@ -53,7 +53,7 @@ class TestBuildCommandMethod(object):
         assert actual_command == expected_command
 
 
-class TestRunCommandMethod(object):
+class TestRunCommandMethod:
     def test_with_non_successful_code(self, mocker, keepassxc_client):
         popen_mock = mocker.patch("services.subprocess.Popen")
         popen_mock.return_value.returncode = 1
@@ -85,7 +85,7 @@ class TestRunCommandMethod(object):
         assert actual_output == "output"
 
 
-class TestShowMethod(object):
+class TestShowMethod:
     def test_build_command_parameters(self, keepassxc_client, mocker):
         build_command_mock = mocker.patch.object(keepassxc_client, "_build_command")
         mocker.patch.object(keepassxc_client, "_run_command")
@@ -207,7 +207,7 @@ class TestShowMethod(object):
         assert actual_keepassxc_item.notes == expected_notes
 
 
-class TestLocateMethod(object):
+class TestLocateMethod:
     def test_build_command_parameters(self, keepassxc_client, mocker):
         build_command_mock = mocker.patch.object(keepassxc_client, "_build_command")
         mocker.patch.object(keepassxc_client, "_run_command")

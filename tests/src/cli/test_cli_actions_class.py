@@ -1,7 +1,7 @@
 from cli import CLIActions
 
 
-class TestChoicesMethod(object):
+class TestChoicesMethod:
     actual_choices = CLIActions.choices()
     expected_choices = [CLIActions.SEARCH, CLIActions.FETCH, CLIActions.SETTINGS_LIST]
 

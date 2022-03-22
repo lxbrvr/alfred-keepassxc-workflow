@@ -5,7 +5,7 @@ import pytest
 from services import KeychainAccess
 
 
-class TestGetPasswordMethod(object):
+class TestGetPasswordMethod:
     @pytest.mark.parametrize(
         "keychain_output, expected_password",
         [

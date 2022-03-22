@@ -5,7 +5,7 @@ import pytest
 from conf import RequiredFieldException
 
 
-class TestIsValidMethod(object):
+class TestIsValidMethod:
     @pytest.mark.parametrize(
         "raised_exception, expected_result",
         [
@@ -20,7 +20,7 @@ class TestIsValidMethod(object):
         assert settings.is_valid() == expected_result
 
 
-class TestValidateMethod(object):
+class TestValidateMethod:
     @pytest.mark.parametrize(
         "alfred_keyword, keepassxc_cli_path, keepassxc_db_path, keychain_account, keychain_service, python_path, expected_exception",
         [

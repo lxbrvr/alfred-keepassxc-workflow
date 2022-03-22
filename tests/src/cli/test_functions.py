@@ -1,7 +1,7 @@
 from cli import CLIActions, main, parse_args
 
 
-class TestMain(object):
+class TestMain:
     def test_exception(self, mocker):
         namespace_mock = mocker.patch("argparse.Namespace")
         namespace_mock.handler.side_effect = Exception
@@ -20,7 +20,7 @@ class TestMain(object):
         print_exc_mock.assert_not_called()
 
 
-class TestParseArgs(object):
+class TestParseArgs:
     def test_subparsers_parameters(self, mocker):
         add_parser_mock = mocker.patch("argparse._SubParsersAction.add_parser")
         mocker.patch("cli.argparse.ArgumentParser.parse_args")

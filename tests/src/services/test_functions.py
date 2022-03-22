@@ -1,7 +1,7 @@
 from services import initialize_keepassxc_client
 
 
-class TestInitializeKeepassXCClient(object):
+class TestInitializeKeepassXCClient:
     def test_calls_with_parameters(self, mocker, valid_settings):
         keychain_access_mock = mocker.patch("services.KeychainAccess.get_password")
         kp_client_mock = mocker.patch("services.KeepassXCClient")

@@ -3,7 +3,7 @@ import pytest
 from services import KeepassXCItem
 
 
-class TestInitMethod(object):
+class TestInitMethod:
     def test_class_attributes(self):
         title = "title"
         password = "password"
@@ -20,7 +20,7 @@ class TestInitMethod(object):
         assert item.password == password
 
 
-class TestIsEmptyMethod(object):
+class TestIsEmptyMethod:
     @pytest.mark.parametrize(
         "value, is_empty",
         [

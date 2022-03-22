@@ -7,7 +7,7 @@ from helpers import (
 )
 
 
-class TestCastValueToBool(object):
+class TestCastValueToBool:
     @pytest.mark.parametrize(
         "incoming_value, expected_boolean",
         [
@@ -25,7 +25,7 @@ class TestCastValueToBool(object):
         assert actual_boolean == expected_boolean
 
 
-class TestSplitStringWithCommas(object):
+class TestSplitStringWithCommas:
     @pytest.mark.parametrize(
         "incoming_value, expected_list",
         [
@@ -40,7 +40,7 @@ class TestSplitStringWithCommas(object):
         assert actual_list == expected_list
 
 
-class TestCastBoolToYesNo(object):
+class TestCastBoolToYesNo:
     @pytest.mark.parametrize("incoming_value, expected_string", [(True, "Yes"), (False, "No")])
     def test(self, incoming_value, expected_string):
         actual_string = cast_bool_to_yesno(incoming_value)

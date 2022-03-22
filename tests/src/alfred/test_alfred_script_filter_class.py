@@ -5,7 +5,7 @@ import pytest
 from alfred import AlfredMod, AlfredModActionEnum, AlfredScriptFilter
 
 
-class TestInitMethod(object):
+class TestInitMethod:
     def test_attributes_initialization(self):
         script_filter = AlfredScriptFilter()
 
@@ -13,7 +13,7 @@ class TestInitMethod(object):
         assert script_filter.variables == {}
 
 
-class TestAddVariableMethod(object):
+class TestAddVariableMethod:
     def test_variables_updating(self, alfred_script_filter):
         incoming_key, incoming_value = 1, 1
         alfred_script_filter.add_variable(incoming_key, incoming_value)
@@ -21,7 +21,7 @@ class TestAddVariableMethod(object):
         assert alfred_script_filter.variables.get(incoming_key) == incoming_value
 
 
-class TestAddItemMethod(object):
+class TestAddItemMethod:
     @pytest.mark.parametrize(
         "title, subtitle, is_valid, arg, mods, expected_item",
         [
@@ -86,7 +86,7 @@ class TestAddItemMethod(object):
         assert len(alfred_script_filter.items[0].get("mods", {})) == expected_number_of_items
 
 
-class TestSendMethod(object):
+class TestSendMethod:
     def test_with_only_items(self, alfred_script_filter, mocker):
         alfred_script_filter.add_item(title="title")
         dump_mock = mocker.patch("alfred.json.dump")

@@ -13,7 +13,7 @@ from handlers import (
 from helpers import cast_bool_to_yesno
 
 
-class TestValidateSettingsDecorator(object):
+class TestValidateSettingsDecorator:
     def test_with_invalid_settings(self, mocker, invalid_settings):
         mocker.patch("handlers.settings", new=invalid_settings)
         add_item_mock = mocker.patch("handlers.AlfredScriptFilter.add_item")
@@ -44,7 +44,7 @@ class TestValidateSettingsDecorator(object):
         handler_mock.assert_called_once()
 
 
-class TestRequirePasswordDecorator(object):
+class TestRequirePasswordDecorator:
     def test_without_password_in_settings(self, mocker, configurable_valid_settings):
         configurable_valid_settings(keepassxc_master_password="")
         add_item_mock = mocker.patch("handlers.AlfredScriptFilter.add_item")
@@ -71,7 +71,7 @@ class TestRequirePasswordDecorator(object):
         handler_mock.assert_called_once()
 
 
-class TestSearchHandler(object):
+class TestSearchHandler:
     def test_kp_client_error(self, mocker, valid_settings, keepassxc_client):
         mocker.patch.object(keepassxc_client, "locate", side_effect=OSError)
         mocker.patch("handlers.initialize_keepassxc_client", return_value=keepassxc_client)
@@ -115,7 +115,7 @@ class TestSearchHandler(object):
         add_variable_mock.assert_called_with("USER_QUERY", parsed_args.query)
 
 
-class TestFetchHandler(object):
+class TestFetchHandler:
     @pytest.mark.parametrize(
         "desired_attributes, expected_added_item_titles",
         [
@@ -427,7 +427,7 @@ class TestFetchHandler(object):
         mod_instance_mock.add_variable.assert_called_once_with("USER_ACTION", "mod")
 
 
-class TestListSettingsHandler(object):
+class TestListSettingsHandler:
     def test_added_items(self, mocker, valid_settings):
         add_item_mock = mocker.patch("handlers.AlfredScriptFilter.add_item")
         send_mock = mocker.patch("handlers.AlfredScriptFilter.send")
