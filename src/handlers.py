@@ -47,13 +47,13 @@ def validate_settings(func: t.Callable[..., None]) -> t.Callable[..., None]:
         script_filter = AlfredScriptFilter()
 
         script_filter.add_item(
-            title="Configure your settings",
-            subtitle="Press to go to settings.",
-            arg="settings",
+            title="Express initialization", subtitle="Press to go to express initialization", arg="express"
         )
 
         script_filter.add_item(
-            title="Express initialization", subtitle="Press to go to express initialization", arg="express"
+            title="Configure your settings",
+            subtitle="Press to go to settings.",
+            arg="settings",
         )
 
         script_filter.send()
