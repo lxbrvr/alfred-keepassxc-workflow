@@ -139,14 +139,18 @@ function isEmptySettings() {
  * Settings object takes values from environment and we can't get new
  * environment values in runtime but we need these values.
  */
-function resetEnvsToDefaults() {
+function resetEnvsToDefaults(protectedEnvs = []) {
     for (let env in DefaultEnvValues) {
-        let exportable = env === EnvNames.ALFRED_KEYWORD
-        setEnv(env, DefaultEnvValues[env], exportable)
+        if (!protectedEnvs.includes(env)) {
+            let exportable = env === EnvNames.ALFRED_KEYWORD
+            setEnv(env, DefaultEnvValues[env], exportable)
+        }
     }
 
     for (let key in Settings) {
-        Settings[key] = DefaultEnvValues[EnvNames[key]]
+        if (!protectedEnvs.includes(key.toLowerCase())) {
+            Settings[key] = DefaultEnvValues[EnvNames[key]]
+        }
     }
 }
 
@@ -591,7 +595,7 @@ function init() {
     }
 
     deletePasswordFromKeychain()
-    resetEnvsToDefaults()
+    resetEnvsToDefaults([EnvNames.PYTHON_PATH, EnvNames.ALFRED_KEYWORD])
 
     let db = askKeepassXCDBPath()
 
