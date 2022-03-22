@@ -200,4 +200,10 @@ def list_settings_handler(_: argparse.Namespace) -> None:  # _ - it's parsed arg
         arg=settings.KEYCHAIN_SERVICE.name,
     )
 
+    script_filter.add_item(
+        title="Python path",
+        subtitle=settings.PYTHON_PATH.raw_value,
+        arg=settings.PYTHON_PATH.name,
+    )
+
     script_filter.send()

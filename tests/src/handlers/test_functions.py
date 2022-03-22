@@ -506,4 +506,10 @@ class TestListSettingsHandler(object):
             arg=valid_settings.KEEPASSXC_CLI_PATH.name,
         )
 
-        assert add_item_mock.call_count == 12
+        add_item_mock.assert_any_call(
+            title="Python path",
+            subtitle=valid_settings.PYTHON_PATH.raw_value,
+            arg=valid_settings.PYTHON_PATH.name,
+        )
+
+        assert add_item_mock.call_count == 13

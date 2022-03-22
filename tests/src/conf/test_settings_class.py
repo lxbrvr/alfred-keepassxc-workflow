@@ -22,14 +22,15 @@ class TestIsValidMethod(object):
 
 class TestValidateMethod(object):
     @pytest.mark.parametrize(
-        "alfred_keyword, keepassxc_cli_path, keepassxc_db_path, keychain_account, keychain_service, expected_exception",
+        "alfred_keyword, keepassxc_cli_path, keepassxc_db_path, keychain_account, keychain_service, python_path, expected_exception",
         [
-            (None, None, None, None, None, pytest.raises(RequiredFieldException)),
-            ("1", None, None, None, None, pytest.raises(RequiredFieldException)),
-            ("1", "1", None, None, None, pytest.raises(RequiredFieldException)),
-            ("1", "1", "1", None, None, pytest.raises(RequiredFieldException)),
-            ("1", "1", "1", "1", None, pytest.raises(RequiredFieldException)),
-            ("1", "1", "1", "1", "1", ExitStack()),
+            (None, None, None, None, None, None, pytest.raises(RequiredFieldException)),
+            ("1", None, None, None, None, None, pytest.raises(RequiredFieldException)),
+            ("1", "1", None, None, None, None, pytest.raises(RequiredFieldException)),
+            ("1", "1", "1", None, None, None, pytest.raises(RequiredFieldException)),
+            ("1", "1", "1", "1", None, None, pytest.raises(RequiredFieldException)),
+            ("1", "1", "1", "1", "1", None, pytest.raises(RequiredFieldException)),
+            ("1", "1", "1", "1", "1", "1", ExitStack()),
         ],
     )
     def test_required_attributes(
@@ -41,6 +42,7 @@ class TestValidateMethod(object):
         keychain_account,
         keychain_service,
         expected_exception,
+        python_path,
     ):
         settings = settings_factory(
             alfred_keyword=alfred_keyword,
@@ -48,6 +50,7 @@ class TestValidateMethod(object):
             keepassxc_db_path=keepassxc_db_path,
             keychain_service=keychain_service,
             keychain_account=keychain_account,
+            python_path=python_path,
         )
 
         with expected_exception:

@@ -16,6 +16,7 @@ def clean_variables_in_plist(plist):
         plist["variables"].update({non_exportable_variable: ""})
 
     plist["variables"].update({"alfred_keyword": "kp"})
+    plist["variables"].update({"python_path": "/usr/bin/python3"})
 
 
 def add_website_to_plist(plist):

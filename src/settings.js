@@ -16,6 +16,16 @@ const cancelErrorNumber = -128 // macos error code for cancel
 CancelError.errorNumber = cancelErrorNumber
 
 
+function isFileExists(path) {
+    try {
+        app.doShellScript(`test -e ${path}`)
+        return true
+    } catch (err) {
+        return false
+    }
+}
+
+
 function setTemporaryEnv(name, value) {
     $.setenv(name, value, 1)
 }
@@ -47,6 +57,7 @@ const EnvNames = Object.freeze({
     DESIRED_ATTRIBUTES: "desired_attributes",
     SHOW_PASSWORDS: "show_passwords",
     ENTRY_DELIMITER: "entry_delimiter",
+    PYTHON_PATH: "python_path",
 })
 
 
@@ -63,6 +74,7 @@ const Settings = {
     DESIRED_ATTRIBUTES: getenv(EnvNames.DESIRED_ATTRIBUTES),
     SHOW_PASSWORDS: getenv(EnvNames.SHOW_PASSWORDS),
     ENTRY_DELIMITER: getenv(EnvNames.ENTRY_DELIMITER),
+    PYTHON_PATH: getenv(EnvNames.PYTHON_PATH),
 }
 
 
@@ -78,7 +90,8 @@ const DefaultEnvValues = {
     [EnvNames.SHOW_UNFILLED_ATTRIBUTES]: "false",
     [EnvNames.DESIRED_ATTRIBUTES]: "title,username,password,url,notes",
     [EnvNames.SHOW_PASSWORDS]: "false",
-    [EnvNames.ENTRY_DELIMITER]: " › "
+    [EnvNames.ENTRY_DELIMITER]: " › ",
+    [EnvNames.PYTHON_PATH]: "/usr/bin/python3",
 }
 
 
@@ -96,6 +109,7 @@ function isDefaultSettings() {
         Settings.DESIRED_ATTRIBUTES === DefaultEnvValues[EnvNames.DESIRED_ATTRIBUTES],
         Settings.SHOW_PASSWORDS === DefaultEnvValues[EnvNames.SHOW_PASSWORDS],
         Settings.ENTRY_DELIMITER === DefaultEnvValues[EnvNames.ENTRY_DELIMITER],
+        Settings.PYTHON_PATH === DefaultEnvValues[EnvNames.PYTHON_PATH],
     ].every(Boolean)
 }
 
@@ -114,6 +128,7 @@ function isEmptySettings() {
         Settings.DESIRED_ATTRIBUTES === "",
         Settings.SHOW_PASSWORDS === "",
         Settings.ENTRY_DELIMITER === "",
+        Settings.PYTHON_PATH === DefaultEnvValues[EnvNames.PYTHON_PATH],
     ].every(Boolean)
 }
 
@@ -511,6 +526,13 @@ function askAlfredKeyword() {
 }
 
 
+function askPythonPath() {
+    let message = "Select the python interpreter. Python must be 3.6+ version."
+    let pythonPath = askFile(message).toString()
+    return askPythonPathAgainIfNecessary(pythonPath)
+}
+
+
 function setEnv(key, value, exportable=false) {
     let alfredApp = Application('com.runningwithcrayons.Alfred')
     alfredApp.setConfiguration(key, {
@@ -537,6 +559,7 @@ function changeSettingKey(argv) {
         [EnvNames.KEEPASSXC_MASTER_PASSWORD]: askKeepassXCMasterPassword,
         [EnvNames.SHOW_PASSWORDS]: askShowPassword,
         [EnvNames.ENTRY_DELIMITER]: askEntryDelimiter,
+        [EnvNames.PYTHON_PATH]: askPythonPath,
     }
 
     let response = dialogsMap[settingKey]()
@@ -585,11 +608,76 @@ function init() {
 }
 
 
+function execPythonVForPythonInterpreter(pythonPath) {
+    try {
+        return app.doShellScript(`${pythonPath} -V`)
+    } catch (err) {}
+}
+
+
+function tryFindOutPythonVersion(pythonPath) {
+    if (!isFileExists(pythonPath)) {
+        throw new Error(`${pythonPath} not found.`)
+    }
+
+    let pythonVOutput = execPythonVForPythonInterpreter(pythonPath)
+
+    if (!pythonVOutput) {
+        throw new Error(`${pythonPath} does not seem to be a python interpreter.`)
+    }
+
+    let [name, version] = pythonVOutput.split(" ")
+
+    if (name !== "Python" || !version) {
+        throw new Error(`${pythonPath} does not seem to be a valid python interpreter.`)
+    }
+
+    let majorPythonVersion = parseInt(version.split(".")[0])
+    let minorPythonVersion = parseInt(version.split(".")[1])
+
+    if (!majorPythonVersion || !minorPythonVersion) {
+        throw new Error("Python version is incorrect.")
+    }
+
+    let isValidPythonVersion = (majorPythonVersion === 3 && minorPythonVersion >= 6)
+
+    if (!isValidPythonVersion) {
+        throw new Error(`Python version is incorrect. Python 3.6+ is required but the selected one is ${version}.`)
+    }
+}
+
+
+function askPythonPathAgainIfNecessary(pythonPath) {
+    try {
+        tryFindOutPythonVersion(pythonPath)
+    } catch (err) {
+        let firstModalMessage = err.message + " Select a correct python interpreter."
+        showDialog(firstModalMessage, ["Select..."])
+        let secondModalMessage = "Select the python interpreter. Python must be 3.6+ version."
+        let pythonPath = askFile(secondModalMessage).toString()
+        return askPythonPathAgainIfNecessary(pythonPath)
+    }
+
+    return pythonPath
+}
+
+
+function checkPythonPath() {
+    let pythonPath = askPythonPathAgainIfNecessary(Settings.PYTHON_PATH)
+
+    if (pythonPath !== Settings.PYTHON_PATH) {
+        setEnv(EnvNames.PYTHON_PATH, pythonPath)
+        showMessage("The python interpreter was changed successfully.")
+    }
+}
+
+
 function getActionFuncByName(actionName) {
     let actionFuncsMap = {
         change: changeSettingKey,
         reset: resetSettings,
         init: init,
+        checkPython: checkPythonPath,
     }
 
     return actionFuncsMap[actionName]

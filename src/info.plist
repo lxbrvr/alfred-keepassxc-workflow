@@ -419,7 +419,7 @@
 				<key>runningsubtext</key>
 				<string></string>
 				<key>script</key>
-				<string>/usr/bin/python3 cli.py search "$1"</string>
+				<string>osascript -l JavaScript settings.js checkPython &amp;&amp; $python_path cli.py search "$1"</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -466,7 +466,7 @@
 				<key>runningsubtext</key>
 				<string></string>
 				<key>script</key>
-				<string>/usr/bin/python3 cli.py fetch "${KP_ITEM_PATH}"</string>
+				<string>osascript -l JavaScript settings.js checkPython &amp;&amp; $python_path cli.py fetch "${KP_ITEM_PATH}"</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -617,7 +617,7 @@
 				<key>runningsubtext</key>
 				<string></string>
 				<key>script</key>
-				<string>/usr/bin/python3 cli.py settings_list</string>
+				<string>osascript -l JavaScript settings.js checkPython &amp;&amp; $python_path cli.py settings_list</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -969,6 +969,8 @@
 		<string></string>
 		<key>keychain_service</key>
 		<string></string>
+		<key>python_path</key>
+		<string>/usr/bin/python3</string>
 		<key>show_attribute_values</key>
 		<string></string>
 		<key>show_passwords</key>
@@ -985,10 +987,11 @@
 		<string>keepassxc_keyfile_path</string>
 		<string>keepassxc_master_password</string>
 		<string>keychain_service</string>
+		<string>python_path</string>
 		<string>show_attribute_values</string>
-		<string>show_unfilled_attributes</string>
 		<string>entry_delimiter</string>
 		<string>show_passwords</string>
+		<string>show_unfilled_attributes</string>
 	</array>
 	<key>version</key>
 	<string>1.2.0</string>

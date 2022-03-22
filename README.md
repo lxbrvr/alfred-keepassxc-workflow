@@ -59,7 +59,7 @@
 
 - Alfred 4+
 - KeepassXC
-- Monterey 12.3+ 
+- Python 3.6+ 
 
 ### Download and import
 

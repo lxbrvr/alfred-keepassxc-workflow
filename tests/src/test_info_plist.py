@@ -12,15 +12,16 @@ def test_not_allowed_to_export_envs(info_plist):
         "show_unfilled_attributes",
         "entry_delimiter",
         "show_passwords",
+        "python_path",
     ]
 
-    assert actual_variables == expected_variables
+    assert actual_variables.sort() == expected_variables.sort()
 
 
 def test_variables_content(info_plist):
     actual_content = info_plist["variables"]
-    exportable_variables = ["alfred_keyword"]
-    not_exportable_variables = [
+    non_empty_variables = ["alfred_keyword", "python_path"]
+    empty_variables = [
         "keepassxc_db_path",
         "keepassxc_cli_path",
         "keychain_account",
@@ -34,11 +35,12 @@ def test_variables_content(info_plist):
         "show_passwords",
     ]
 
-    all_variables = exportable_variables + not_exportable_variables
+    all_variables = non_empty_variables + empty_variables
 
     assert actual_content["alfred_keyword"] == "kp"
+    assert actual_content["python_path"] == "/usr/bin/python3"
     assert set(actual_content.keys()) == set(all_variables)
-    assert all(actual_content[i] == "" for i in not_exportable_variables)
+    assert all(actual_content[i] == "" for i in empty_variables)
 
 
 def test_web_address(info_plist):

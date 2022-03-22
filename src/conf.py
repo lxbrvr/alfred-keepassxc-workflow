@@ -80,6 +80,7 @@ class Settings(metaclass=SettingsMeta):
     DESIRED_ATTRIBUTES = SettingsAttr(env_name="desired_attributes", cast_to=split_string_with_commas)
     SHOW_PASSWORDS = SettingsAttr(env_name="show_passwords", cast_to=cast_value_to_bool)
     ENTRY_DELIMITER = SettingsAttr(env_name="entry_delimiter")
+    PYTHON_PATH = SettingsAttr(env_name="python_path", required=True)
 
     def validate(self) -> None:
         """

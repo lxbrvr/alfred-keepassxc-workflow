@@ -66,7 +66,7 @@ class TestRunCommandMethod(object):
     def test_popen_parameters(self, mocker, keepassxc_client):
         popen_mock = mocker.patch("services.subprocess.Popen")
         popen_mock.return_value.returncode = 0
-        popen_mock.return_value.communicate.return_value = ("", "")
+        popen_mock.return_value.communicate.return_value = (b"", b"")
 
         command = "command"
         keepassxc_client._run_command(command)
@@ -77,12 +77,12 @@ class TestRunCommandMethod(object):
     def test_output(self, mocker, keepassxc_client):
         popen_mock = mocker.patch("services.subprocess.Popen")
         popen_mock.return_value.returncode = 0
-        expected_output = "output"
-        popen_mock.return_value.communicate.return_value = (expected_output, "")
+        expected_output = b"output"
+        popen_mock.return_value.communicate.return_value = (expected_output, b"")
         command = "command"
         actual_output = keepassxc_client._run_command(command)
 
-        assert actual_output == expected_output
+        assert actual_output == "output"
 
 
 class TestShowMethod(object):

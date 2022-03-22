@@ -9,7 +9,8 @@ from services import KeepassXCClient, KeepassXCItem
 
 @pytest.fixture
 def info_plist():
-    return plistlib.readPlist("src/info.plist")
+    with open("src/info.plist", "rb") as info_plist:
+        return plistlib.loads(info_plist.read())
 
 
 @pytest.fixture
@@ -71,6 +72,7 @@ def valid_settings(settings_factory, keychain_service, keychain_account):
         keychain_account=keychain_account,
         entry_delimiter=" > ",
         desired_attributes="title,username,password",
+        python_path="/usr/bin/python3",
     )
 
 

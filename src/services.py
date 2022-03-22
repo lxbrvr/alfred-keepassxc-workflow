@@ -93,7 +93,7 @@ class KeepassXCClient:
             error = "Can't fetch data from keepassxc-cli tool.\nExit code: {exit_code}.\n"
             raise OSError(error.format(output=output, exit_code=process.returncode))
 
-        return str(output)
+        return output.decode("utf-8")
 
     def show(self, query: str) -> KeepassXCItem:
         """Handles the system command "keepassxc-cli show"."""
