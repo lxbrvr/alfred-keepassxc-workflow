@@ -611,10 +611,20 @@ function init() {
     showMessage("The initialization was successful.")
 }
 
-
+/**
+ * Before python3.4 "python -V" sent output to stderr.
+ * Since python3.4 it sends to stdout.
+ * So first it tries to get the version from stdout and then from stderr.
+ */
 function execPythonVForPythonInterpreter(pythonPath) {
     try {
-        return app.doShellScript(`${pythonPath} -V`)
+        let commandOutput = app.doShellScript(`${pythonPath} -V`)
+
+        if (!commandOutput) {
+            commandOutput = app.doShellScript(`${pythonPath} -V 2>&1`)
+        }
+
+        return commandOutput
     } catch (err) {}
 }
 
