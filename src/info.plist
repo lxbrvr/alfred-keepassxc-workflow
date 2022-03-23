@@ -994,7 +994,7 @@
 		<string>show_unfilled_attributes</string>
 	</array>
 	<key>version</key>
-	<string>1.2.0</string>
+	<string>2.0.0</string>
 	<key>webaddress</key>
 	<string>https://github.com/lxbrvr/alfred-keepassxc-workflow</string>
 </dict>
