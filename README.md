@@ -54,7 +54,7 @@
 #### Requirements
 
 - Alfred 4+
-- KeepassXC
+- KeepassXC 2.7+
 - Python 3.6+ 
 
 #### Download and import
@@ -64,13 +64,13 @@
 
 ## Usage
 
-| Command       | Description                                                                                                                                                                                                             |
-|---------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `kp:init`     | Express initialization. This is the first thing you need to do before searching for some KeepassXC database entries.<br/><br/>It'll ask you about KeepassXC database, KeepassXC key file and KeepassXC master password. |
-| `kp <term>`   | Finds entries in a KeepassXC database based on `<term>` and shows them.                                                                                                                                                 |
-| `kp:settings` | Settings for the workflow.                                                                                                                                                                                              |
-| `kp:reset`    | Resets the workflow settings to default values. It also removes the master password from Keychain.                                                                                                                      |
-| `kp:about`    | Opens the workflow homepage in your default browser.                                                                                                                                                                    |
+| Command       | Description                                                                                                                                                                                                                                    |
+|---------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `kp:init`     | Express initialization. This is the first thing you need to do before searching for some KeepassXC database entries.<br/><br/>It'll ask you about KeepassXC database, KeepassXC key file and KeepassXC master password.                        |
+| `kp <term>`   | Finds entries in a KeepassXC database based on `<term>` and shows them. The search behavior is the same as in the KeepassXC UI. For more information, see [here](https://keepassxc.org/docs/KeePassXC_UserGuide.html#_searching_the_database). |
+| `kp:settings` | Settings for the workflow.                                                                                                                                                                                                                     |
+| `kp:reset`    | Resets the workflow settings to default values. It also removes the master password from Keychain.                                                                                                                                             |
+| `kp:about`    | Opens the workflow homepage in your default browser.                                                                                                                                                                                           |
 
 ## Development
 

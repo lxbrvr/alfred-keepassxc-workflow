@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- KeepassXC 2.7 support.
+- Link to search instruction to README.md.
+
+### Changed
+
+- Requirements for KeepassXC version in README.md.
+
+### Removed
+
+- Support for KeepassXC versions before 2.7.
+
 ## [2.0.0] - 2022-03-24
 
 ### Added
@@ -57,6 +72,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - First release
 
+[Unreleased]: https://github.com/lxbrvr/alfred-keepassxc-workflow/compare/2.0.0...HEAD
 [2.0.0]: https://github.com/lxbrvr/alfred-keepassxc-workflow/compare/1.2.0...2.0.0
 [1.2.0]: https://github.com/lxbrvr/alfred-keepassxc-workflow/compare/1.1.0...1.2.0
 [1.1.0]: https://github.com/lxbrvr/alfred-keepassxc-workflow/compare/1.0.0...1.1.0

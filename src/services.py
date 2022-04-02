@@ -33,7 +33,7 @@ class KeychainAccess:
 
         command = ["security", "find-generic-password", "-g", "-a", account, "-s", service]
         process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        stdout, stderr = process.communicate()
+        _, stderr = process.communicate()
 
         if process.returncode != 0:
             error = "Can't fetch a password from security tool.\nExit code: {exit_code}.\nOutput: {output}"
@@ -112,10 +112,10 @@ class KeepassXCClient:
             notes="\n".join(entry_data[4:]),
         )
 
-    def locate(self, query: str) -> t.List[str]:
-        """Handles the system command "keepassxc-cli locate"."""
+    def search(self, query: str) -> t.List[str]:
+        """Handles the system command "keepassxc-cli search"."""
 
-        command = self._build_command(action="locate", action_parameters=[query])
+        command = self._build_command(action="search", action_parameters=[query])
         output = self._run_command(command)
 
         return output.split("\n")[:-1]  # the latest element is empty string

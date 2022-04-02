@@ -207,22 +207,22 @@ class TestShowMethod:
         assert actual_keepassxc_item.notes == expected_notes
 
 
-class TestLocateMethod:
+class TestSearchMethod:
     def test_build_command_parameters(self, keepassxc_client, mocker):
         build_command_mock = mocker.patch.object(keepassxc_client, "_build_command")
         mocker.patch.object(keepassxc_client, "_run_command")
         incoming_query = "query"
-        keepassxc_client.locate(incoming_query)
+        keepassxc_client.search(incoming_query)
 
         build_command_mock.assert_called_with(
-            action="locate",
+            action="search",
             action_parameters=[incoming_query],
         )
 
     def test_run_command(self, keepassxc_client, mocker):
         build_command_mock = mocker.patch.object(keepassxc_client, "_build_command")
         run_command_mock = mocker.patch.object(keepassxc_client, "_run_command")
-        keepassxc_client.locate("query")
+        keepassxc_client.search("query")
 
         run_command_mock.assert_called_with(build_command_mock())
 
@@ -233,6 +233,6 @@ class TestLocateMethod:
     def test_parsing_of_command_output(self, keepassxc_client, mocker, command_output, expected_result):
         mocker.patch.object(keepassxc_client, "_build_command")
         mocker.patch.object(keepassxc_client, "_run_command", return_value=command_output)
-        actual_result = keepassxc_client.locate("query")
+        actual_result = keepassxc_client.search("query")
 
         assert actual_result == expected_result

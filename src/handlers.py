@@ -73,7 +73,7 @@ def search_handler(parsed_args: argparse.Namespace) -> None:
     kp_client = initialize_keepassxc_client()
 
     try:
-        kp_entries = kp_client.locate(parsed_args.query)
+        kp_entries = kp_client.search(parsed_args.query)
     except OSError:
         script_filter.add_item(title="There aren't matches or something went wrong.", is_valid=False)
         script_filter.send()
