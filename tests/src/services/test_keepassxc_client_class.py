@@ -236,3 +236,32 @@ class TestSearchMethod:
         actual_result = keepassxc_client.search("query")
 
         assert actual_result == expected_result
+
+
+class TestTotpMethod:
+    def test_build_command_parameters(self, keepassxc_client, mocker):
+        build_command_mock = mocker.patch.object(keepassxc_client, "_build_command")
+        mocker.patch.object(keepassxc_client, "_run_command")
+        incoming_query = "query"
+        keepassxc_client.totp(incoming_query)
+
+        build_command_mock.assert_called_with(
+            action="show",
+            action_parameters=["-t", incoming_query],
+        )
+
+    def test_run_command(self, keepassxc_client, mocker):
+        build_command_mock = mocker.patch.object(keepassxc_client, "_build_command")
+        run_command_mock = mocker.patch.object(keepassxc_client, "_run_command")
+        keepassxc_client.totp("query")
+
+        run_command_mock.assert_called_with(build_command_mock())
+
+    def test_parsing_of_command_output(self, keepassxc_client, mocker):
+        actual_output = "123\n"
+        expected_result = "123"
+        mocker.patch.object(keepassxc_client, "_build_command")
+        mocker.patch.object(keepassxc_client, "_run_command", return_value=actual_output)
+        actual_result = keepassxc_client.totp("query")
+
+        assert actual_result == expected_result
