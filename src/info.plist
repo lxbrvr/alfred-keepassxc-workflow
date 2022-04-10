@@ -6,6 +6,44 @@
 	<string>com.lxbrvr.keepassxcalfred</string>
 	<key>connections</key>
 	<dict>
+		<key>00ADC909-EFF4-4B3B-96B6-E648A5910EC9</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>1F3CC929-CA46-411B-BD67-A40AABFBB308</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>sourceoutputuid</key>
+				<string>2C72E4DD-C25B-4BEB-9590-7A07E0E5E380</string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>9131D8B1-D408-4126-91D4-88493D169CE2</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>057C5A80-BFC0-43BF-A190-399A71855B4D</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>84EEC3D2-213E-4ACC-A6D7-69981CB64510</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 		<key>3F5B4A74-E524-4ADE-B5FF-1E481FCAB6F5</key>
 		<array/>
 		<key>582F3D94-E0EA-4181-8A7F-BA9C87AC9C08</key>
@@ -31,6 +69,18 @@
 				<string></string>
 				<key>sourceoutputuid</key>
 				<string>2C72E4DD-C25B-4BEB-9590-7A07E0E5E380</string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>057C5A80-BFC0-43BF-A190-399A71855B4D</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>sourceoutputuid</key>
+				<string>361DF126-D81A-4ABA-AD3C-3484AE182826</string>
 				<key>vitoclose</key>
 				<false/>
 			</dict>
@@ -94,6 +144,21 @@
 				<false/>
 			</dict>
 		</array>
+		<key>84EEC3D2-213E-4ACC-A6D7-69981CB64510</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>D4166432-4D67-4D5F-BD44-829E3C15706A</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>9131D8B1-D408-4126-91D4-88493D169CE2</key>
+		<array/>
 		<key>C5304F2E-3703-45AE-985B-3D66C24D07E4</key>
 		<array>
 			<dict>
@@ -129,6 +194,55 @@
 				<integer>0</integer>
 				<key>modifiersubtext</key>
 				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>D4166432-4D67-4D5F-BD44-829E3C15706A</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>35C9CF21-8C3A-4CEB-AFEC-0DA08ED7D3CB</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>sourceoutputuid</key>
+				<string>298D37E2-5DF5-4CC9-AC1E-975328E6FF60</string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>3F5B4A74-E524-4ADE-B5FF-1E481FCAB6F5</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>sourceoutputuid</key>
+				<string>FC22BDD2-0870-4886-8B58-7D306E8EE9FF</string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>00ADC909-EFF4-4B3B-96B6-E648A5910EC9</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>5220E64D-387E-4FA5-AE40-51937778C9FB</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>sourceoutputuid</key>
+				<string>F468ECAB-7285-4D5D-806F-5C3765EED841</string>
 				<key>vitoclose</key>
 				<false/>
 			</dict>
@@ -263,21 +377,6 @@
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>argument</key>
-				<string>{var:alfred_keyword}:settings</string>
-				<key>leftcursor</key>
-				<false/>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.utility.showalfred</string>
-			<key>uid</key>
-			<string>35C9CF21-8C3A-4CEB-AFEC-0DA08ED7D3CB</string>
-			<key>version</key>
-			<integer>1</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
 				<key>conditions</key>
 				<array>
 					<dict>
@@ -388,6 +487,21 @@
 			<string>alfred.workflow.utility.conditional</string>
 			<key>uid</key>
 			<string>7146D7E9-9CC8-4AB4-A4CD-DE15B707908C</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argument</key>
+				<string>{var:alfred_keyword}:settings</string>
+				<key>leftcursor</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.showalfred</string>
+			<key>uid</key>
+			<string>35C9CF21-8C3A-4CEB-AFEC-0DA08ED7D3CB</string>
 			<key>version</key>
 			<integer>1</integer>
 		</dict>
@@ -524,6 +638,20 @@ $python_path cli.py fetch "${KP_ITEM_PATH}"</string>
 						<key>uid</key>
 						<string>2C72E4DD-C25B-4BEB-9590-7A07E0E5E380</string>
 					</dict>
+					<dict>
+						<key>inputstring</key>
+						<string></string>
+						<key>matchcasesensitive</key>
+						<false/>
+						<key>matchmode</key>
+						<integer>0</integer>
+						<key>matchstring</key>
+						<string>totp</string>
+						<key>outputlabel</key>
+						<string>totp</string>
+						<key>uid</key>
+						<string>361DF126-D81A-4ABA-AD3C-3484AE182826</string>
+					</dict>
 				</array>
 				<key>elselabel</key>
 				<string>copy</string>
@@ -577,21 +705,149 @@ $python_path cli.py fetch "${KP_ITEM_PATH}"</string>
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>autopaste</key>
+				<key>argument</key>
+				<string></string>
+				<key>passthroughargument</key>
 				<false/>
-				<key>clipboardtext</key>
-				<string>{query}</string>
-				<key>ignoredynamicplaceholders</key>
-				<false/>
-				<key>transient</key>
-				<true/>
+				<key>variables</key>
+				<dict/>
 			</dict>
 			<key>type</key>
-			<string>alfred.workflow.output.clipboard</string>
+			<string>alfred.workflow.utility.argument</string>
 			<key>uid</key>
-			<string>9131D8B1-D408-4126-91D4-88493D169CE2</string>
+			<string>057C5A80-BFC0-43BF-A190-399A71855B4D</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>conditions</key>
+				<array>
+					<dict>
+						<key>inputstring</key>
+						<string></string>
+						<key>matchcasesensitive</key>
+						<false/>
+						<key>matchmode</key>
+						<integer>0</integer>
+						<key>matchstring</key>
+						<string>settings</string>
+						<key>outputlabel</key>
+						<string>open settings</string>
+						<key>uid</key>
+						<string>298D37E2-5DF5-4CC9-AC1E-975328E6FF60</string>
+					</dict>
+					<dict>
+						<key>inputstring</key>
+						<string></string>
+						<key>matchcasesensitive</key>
+						<false/>
+						<key>matchmode</key>
+						<integer>0</integer>
+						<key>matchstring</key>
+						<string>express</string>
+						<key>outputlabel</key>
+						<string>start express init</string>
+						<key>uid</key>
+						<string>F468ECAB-7285-4D5D-806F-5C3765EED841</string>
+					</dict>
+					<dict>
+						<key>inputstring</key>
+						<string></string>
+						<key>matchcasesensitive</key>
+						<false/>
+						<key>matchmode</key>
+						<integer>0</integer>
+						<key>matchstring</key>
+						<string>KEEPASSXC_MASTER_PASSWORD</string>
+						<key>outputlabel</key>
+						<string>ask password</string>
+						<key>uid</key>
+						<string>FC22BDD2-0870-4886-8B58-7D306E8EE9FF</string>
+					</dict>
+				</array>
+				<key>elselabel</key>
+				<string>continue</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.conditional</string>
+			<key>uid</key>
+			<string>D4166432-4D67-4D5F-BD44-829E3C15706A</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>alfredfiltersresults</key>
+				<true/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>0</integer>
+				<key>argumenttreatemptyqueryasnil</key>
+				<true/>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>2</integer>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<true/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string></string>
+				<key>script</key>
+				<string>osascript -l JavaScript settings.js checkPython &amp;&amp;  \
+osascript -l JavaScript settings.js checkKeepassXC &amp;&amp;  \
+$python_path cli.py totp "${KP_ITEM_PATH}"</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>subtext</key>
+				<string></string>
+				<key>title</key>
+				<string></string>
+				<key>type</key>
+				<integer>0</integer>
+				<key>withspace</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>84EEC3D2-213E-4ACC-A6D7-69981CB64510</string>
 			<key>version</key>
 			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>script</key>
+				<string>osascript -l JavaScript settings.js change $1</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>3F5B4A74-E524-4ADE-B5FF-1E481FCAB6F5</string>
+			<key>version</key>
+			<integer>2</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -645,25 +901,51 @@ $python_path cli.py fetch "${KP_ITEM_PATH}"</string>
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>concurrently</key>
-				<false/>
-				<key>escaping</key>
-				<integer>102</integer>
-				<key>script</key>
-				<string>osascript -l JavaScript settings.js change $1</string>
-				<key>scriptargtype</key>
-				<integer>1</integer>
-				<key>scriptfile</key>
-				<string></string>
-				<key>type</key>
-				<integer>0</integer>
+				<key>conditions</key>
+				<array>
+					<dict>
+						<key>inputstring</key>
+						<string>{var:USER_ACTION}</string>
+						<key>matchcasesensitive</key>
+						<false/>
+						<key>matchmode</key>
+						<integer>0</integer>
+						<key>matchstring</key>
+						<string>mod</string>
+						<key>outputlabel</key>
+						<string>mod</string>
+						<key>uid</key>
+						<string>2C72E4DD-C25B-4BEB-9590-7A07E0E5E380</string>
+					</dict>
+				</array>
+				<key>elselabel</key>
+				<string>copy</string>
 			</dict>
 			<key>type</key>
-			<string>alfred.workflow.action.script</string>
+			<string>alfred.workflow.utility.conditional</string>
 			<key>uid</key>
-			<string>3F5B4A74-E524-4ADE-B5FF-1E481FCAB6F5</string>
+			<string>00ADC909-EFF4-4B3B-96B6-E648A5910EC9</string>
 			<key>version</key>
-			<integer>2</integer>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>autopaste</key>
+				<false/>
+				<key>clipboardtext</key>
+				<string>{query}</string>
+				<key>ignoredynamicplaceholders</key>
+				<false/>
+				<key>transient</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.clipboard</string>
+			<key>uid</key>
+			<string>9131D8B1-D408-4126-91D4-88493D169CE2</string>
+			<key>version</key>
+			<integer>3</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -712,27 +994,6 @@ $python_path cli.py fetch "${KP_ITEM_PATH}"</string>
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>argumenttype</key>
-				<integer>2</integer>
-				<key>keyword</key>
-				<string>{var:alfred_keyword}:init</string>
-				<key>subtext</key>
-				<string>Express initialization of main parameters.</string>
-				<key>text</key>
-				<string>Express initialization</string>
-				<key>withspace</key>
-				<false/>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.input.keyword</string>
-			<key>uid</key>
-			<string>CD5FD911-2F89-4F00-A8E3-D59DB8944A3B</string>
-			<key>version</key>
-			<integer>1</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
 				<key>concurrently</key>
 				<false/>
 				<key>escaping</key>
@@ -759,18 +1020,18 @@ $python_path cli.py fetch "${KP_ITEM_PATH}"</string>
 				<key>argumenttype</key>
 				<integer>2</integer>
 				<key>keyword</key>
-				<string>{var:alfred_keyword}:about</string>
+				<string>{var:alfred_keyword}:init</string>
 				<key>subtext</key>
-				<string>Open the project page on github.</string>
+				<string>Express initialization of main parameters.</string>
 				<key>text</key>
-				<string>About</string>
+				<string>Express initialization</string>
 				<key>withspace</key>
 				<false/>
 			</dict>
 			<key>type</key>
 			<string>alfred.workflow.input.keyword</string>
 			<key>uid</key>
-			<string>C5304F2E-3703-45AE-985B-3D66C24D07E4</string>
+			<string>CD5FD911-2F89-4F00-A8E3-D59DB8944A3B</string>
 			<key>version</key>
 			<integer>1</integer>
 		</dict>
@@ -793,11 +1054,48 @@ $python_path cli.py fetch "${KP_ITEM_PATH}"</string>
 			<key>version</key>
 			<integer>1</integer>
 		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>2</integer>
+				<key>keyword</key>
+				<string>{var:alfred_keyword}:about</string>
+				<key>subtext</key>
+				<string>Open the project page on github.</string>
+				<key>text</key>
+				<string>About</string>
+				<key>withspace</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.keyword</string>
+			<key>uid</key>
+			<string>C5304F2E-3703-45AE-985B-3D66C24D07E4</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
 	</array>
 	<key>readme</key>
 	<string></string>
 	<key>uidata</key>
 	<dict>
+		<key>00ADC909-EFF4-4B3B-96B6-E648A5910EC9</key>
+		<dict>
+			<key>xpos</key>
+			<integer>1375</integer>
+			<key>ypos</key>
+			<integer>390</integer>
+		</dict>
+		<key>057C5A80-BFC0-43BF-A190-399A71855B4D</key>
+		<dict>
+			<key>note</key>
+			<string>Don't pass query string to input</string>
+			<key>xpos</key>
+			<integer>865</integer>
+			<key>ypos</key>
+			<integer>285</integer>
+		</dict>
 		<key>0A73C0DF-14BB-43B4-B5F3-CBDBC59CE711</key>
 		<dict>
 			<key>xpos</key>
@@ -873,6 +1171,15 @@ $python_path cli.py fetch "${KP_ITEM_PATH}"</string>
 			<key>ypos</key>
 			<integer>520</integer>
 		</dict>
+		<key>84EEC3D2-213E-4ACC-A6D7-69981CB64510</key>
+		<dict>
+			<key>note</key>
+			<string>Fetches TOTP for given KeepassXC entry.</string>
+			<key>xpos</key>
+			<integer>1010</integer>
+			<key>ypos</key>
+			<integer>330</integer>
+		</dict>
 		<key>9131D8B1-D408-4126-91D4-88493D169CE2</key>
 		<dict>
 			<key>note</key>
@@ -880,7 +1187,7 @@ $python_path cli.py fetch "${KP_ITEM_PATH}"</string>
 			<key>xpos</key>
 			<integer>1010</integer>
 			<key>ypos</key>
-			<integer>325</integer>
+			<integer>490</integer>
 		</dict>
 		<key>C5304F2E-3703-45AE-985B-3D66C24D07E4</key>
 		<dict>
@@ -908,6 +1215,13 @@ $python_path cli.py fetch "${KP_ITEM_PATH}"</string>
 			<integer>520</integer>
 			<key>ypos</key>
 			<integer>70</integer>
+		</dict>
+		<key>D4166432-4D67-4D5F-BD44-829E3C15706A</key>
+		<dict>
+			<key>xpos</key>
+			<integer>1200</integer>
+			<key>ypos</key>
+			<integer>320</integer>
 		</dict>
 		<key>D9A33F6E-4CCA-4C52-9064-0A71529B26F8</key>
 		<dict>
@@ -979,23 +1293,26 @@ $python_path cli.py fetch "${KP_ITEM_PATH}"</string>
 		<string></string>
 		<key>show_passwords</key>
 		<string></string>
+		<key>show_totp_request</key>
+		<string></string>
 		<key>show_unfilled_attributes</key>
 		<string></string>
 	</dict>
 	<key>variablesdontexport</key>
 	<array>
 		<string>keepassxc_db_path</string>
-		<string>keepassxc_cli_path</string>
-		<string>keychain_account</string>
-		<string>desired_attributes</string>
-		<string>keepassxc_keyfile_path</string>
 		<string>keepassxc_master_password</string>
-		<string>keychain_service</string>
-		<string>python_path</string>
-		<string>show_attribute_values</string>
-		<string>entry_delimiter</string>
-		<string>show_passwords</string>
+		<string>show_totp_request</string>
 		<string>show_unfilled_attributes</string>
+		<string>show_attribute_values</string>
+		<string>keychain_account</string>
+		<string>keepassxc_cli_path</string>
+		<string>keepassxc_keyfile_path</string>
+		<string>python_path</string>
+		<string>desired_attributes</string>
+		<string>show_passwords</string>
+		<string>keychain_service</string>
+		<string>entry_delimiter</string>
 	</array>
 	<key>version</key>
 	<string>2.0.0</string>

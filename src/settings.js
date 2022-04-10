@@ -63,6 +63,7 @@ const EnvNames = Object.freeze({
     SHOW_PASSWORDS: "show_passwords",
     ENTRY_DELIMITER: "entry_delimiter",
     PYTHON_PATH: "python_path",
+    SHOW_TOTP_REQUEST: "show_totp_request",
 })
 
 
@@ -80,6 +81,7 @@ const Settings = {
     SHOW_PASSWORDS: getenv(EnvNames.SHOW_PASSWORDS),
     ENTRY_DELIMITER: getenv(EnvNames.ENTRY_DELIMITER),
     PYTHON_PATH: getenv(EnvNames.PYTHON_PATH),
+    SHOW_TOTP_REQUEST: getenv(EnvNames.SHOW_TOTP_REQUEST),
 }
 
 
@@ -97,6 +99,7 @@ const DefaultEnvValues = {
     [EnvNames.SHOW_PASSWORDS]: "false",
     [EnvNames.ENTRY_DELIMITER]: " › ",
     [EnvNames.PYTHON_PATH]: "/usr/bin/python3",
+    [EnvNames.SHOW_TOTP_REQUEST]: "true",
 }
 
 
@@ -115,6 +118,7 @@ function isDefaultSettings() {
         Settings.SHOW_PASSWORDS === DefaultEnvValues[EnvNames.SHOW_PASSWORDS],
         Settings.ENTRY_DELIMITER === DefaultEnvValues[EnvNames.ENTRY_DELIMITER],
         Settings.PYTHON_PATH === DefaultEnvValues[EnvNames.PYTHON_PATH],
+        Settings.SHOW_TOTP_REQUEST === DefaultEnvValues[EnvNames.SHOW_TOTP_REQUEST],
     ].every(Boolean)
 }
 
@@ -134,6 +138,7 @@ function isEmptySettings() {
         Settings.SHOW_PASSWORDS === "",
         Settings.ENTRY_DELIMITER === "",
         Settings.PYTHON_PATH === DefaultEnvValues[EnvNames.PYTHON_PATH],
+        Settings.SHOW_TOTP_REQUEST === "",
     ].every(Boolean)
 }
 
@@ -542,6 +547,17 @@ function askPythonPath() {
 }
 
 
+function askShowTotpRequest() {
+    let message = [
+        "By default, the workflow provides the option to request a TOTP for KeepassXC entries.",
+        "If you do not use it, you can hide this feature.",
+        "\n\n",
+        "Display the TOTP request option?",
+    ].join("")
+
+    return askYesOrNo(message)
+}
+
 function setEnv(key, value, exportable=false) {
     let alfredApp = Application('com.runningwithcrayons.Alfred')
     alfredApp.setConfiguration(key, {
@@ -569,6 +585,7 @@ function changeSettingKey(argv) {
         [EnvNames.SHOW_PASSWORDS]: askShowPassword,
         [EnvNames.ENTRY_DELIMITER]: askEntryDelimiter,
         [EnvNames.PYTHON_PATH]: askPythonPath,
+        [EnvNames.SHOW_TOTP_REQUEST]: askShowTotpRequest,
     }
 
     let response = dialogsMap[settingKey]()

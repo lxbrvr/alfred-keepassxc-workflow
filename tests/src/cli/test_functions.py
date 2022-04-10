@@ -29,4 +29,6 @@ class TestParseArgs:
         add_parser_mock.assert_any_call(CLIActions.SEARCH)
         add_parser_mock.assert_any_call(CLIActions.SETTINGS_LIST)
         add_parser_mock.assert_any_call(CLIActions.FETCH)
-        assert add_parser_mock.call_count == 3
+        add_parser_mock.assert_any_call(CLIActions.TOTP)
+
+        assert add_parser_mock.call_count == 4

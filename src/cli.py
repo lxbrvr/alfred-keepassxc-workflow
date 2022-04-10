@@ -2,13 +2,19 @@ import argparse
 import traceback
 import typing as t
 
-from handlers import fetch_handler, list_settings_handler, search_handler
+from handlers import (
+    fetch_handler,
+    list_settings_handler,
+    search_handler,
+    totp_handler,
+)
 
 
 class CLIActions:
     SEARCH = "search"
     FETCH = "fetch"
     SETTINGS_LIST = "settings_list"
+    TOTP = "totp"
 
     @classmethod
     def choices(cls) -> t.List[str]:
@@ -18,6 +24,7 @@ class CLIActions:
             cls.SEARCH,
             cls.FETCH,
             cls.SETTINGS_LIST,
+            cls.TOTP,
         ]
 
 
@@ -35,6 +42,10 @@ def parse_args() -> argparse.Namespace:
 
     settings_list_parser = subparsers.add_parser(CLIActions.SETTINGS_LIST)
     settings_list_parser.set_defaults(handler=list_settings_handler)
+
+    totp_parser = subparsers.add_parser(CLIActions.TOTP)
+    totp_parser.set_defaults(handler=totp_handler)
+    totp_parser.add_argument("query")
 
     return parser.parse_args()
 

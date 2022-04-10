@@ -11,7 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - KeepassXC 2.7 support.
 - Link to search instruction to README.md.
-- KeepassXC version check.
+- Check KeepassXC CLI before executing commands.
+- TOTP request for KeepassXC entries.
 
 ### Changed
 

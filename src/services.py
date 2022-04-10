@@ -96,7 +96,7 @@ class KeepassXCClient:
         return output.decode("utf-8")
 
     def show(self, query: str) -> KeepassXCItem:
-        """Handles the system command "keepassxc-cli show"."""
+        """Handles the command "keepassxc-cli show" with --attributes flags."""
 
         cmd_parameters = "-a title -a username -a password -a url -a notes".split(" ")
         cmd_parameters += [query]
@@ -113,12 +113,21 @@ class KeepassXCClient:
         )
 
     def search(self, query: str) -> t.List[str]:
-        """Handles the system command "keepassxc-cli search"."""
+        """Handles the command "keepassxc-cli search"."""
 
         command = self._build_command(action="search", action_parameters=[query])
         output = self._run_command(command)
 
         return output.split("\n")[:-1]  # the latest element is empty string
+
+    def totp(self, query: str) -> str:
+        """Handles the command "keepassxc-cli show" with --totp flag."""
+
+        cmd_parameters = ["-t", query]
+        command = self._build_command(action="show", action_parameters=cmd_parameters)
+        output = self._run_command(command)
+
+        return output[:-1]  # the latest element is break line
 
 
 def initialize_keepassxc_client() -> KeepassXCClient:

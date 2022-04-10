@@ -90,12 +90,15 @@ def search_handler(parsed_args: argparse.Namespace) -> None:
 @validate_settings
 @require_password
 def fetch_handler(parsed_args: argparse.Namespace) -> None:
-    """Forms a list with KeepassXC entry attributes and send it to the Alfred's script filter."""
+    """Forms a list with KeepassXC entry attributes and sends it to the Alfred's script filter."""
 
     script_filter = AlfredScriptFilter()
     kp_client = initialize_keepassxc_client()
     kp_entry = kp_client.show(parsed_args.query)
     script_filter.add_item(title="← Back", subtitle="Back to search", arg="back")
+
+    if settings.SHOW_TOTP_REQUEST.value:
+        script_filter.add_item(title="TOTP", subtitle="Press Enter to request TOTP.", arg="totp")
 
     for desired_attr in settings.DESIRED_ATTRIBUTES.value:
         entry_value = getattr(kp_entry, desired_attr.strip())
@@ -116,6 +119,27 @@ def fetch_handler(parsed_args: argparse.Namespace) -> None:
         mod.add_variable("USER_ACTION", "mod")
         script_filter.add_item(title=title, subtitle=subtitle, is_valid=is_valid, arg=entry_value, mods=[mod])
 
+    script_filter.send()
+
+
+@validate_settings
+@require_password
+def totp_handler(parsed_args: argparse.Namespace) -> None:
+    """Requests TOTP for a given KeepassXC entry and sends it to the Alfred workflow."""
+
+    script_filter = AlfredScriptFilter()
+    kp_client = initialize_keepassxc_client()
+
+    try:
+        totp = kp_client.totp(parsed_args.query)
+    except OSError:
+        script_filter.add_item(title="There is no configured TOTP or something went wrong.", is_valid=False)
+        script_filter.send()
+        raise
+
+    mod = AlfredMod(action=AlfredModActionEnum.CMD, subtitle="Copy and paste to front most app.", arg=totp)
+    mod.add_variable("USER_ACTION", "mod")
+    script_filter.add_item(title=totp, subtitle="Press Enter to copy the TOTP.", arg=totp, mods=[mod])
     script_filter.send()
 
 
@@ -174,6 +198,12 @@ def list_settings_handler(_: argparse.Namespace) -> None:  # _ - it's parsed arg
         title="Display real passwords of KeepassXC records",
         subtitle=cast_bool_to_yesno(settings.SHOW_PASSWORDS.value),
         arg=settings.SHOW_PASSWORDS.name,
+    )
+
+    script_filter.add_item(
+        title="Display TOTP request",
+        subtitle=cast_bool_to_yesno(settings.SHOW_TOTP_REQUEST.value),
+        arg=settings.SHOW_TOTP_REQUEST.name,
     )
 
     script_filter.add_item(

@@ -33,6 +33,7 @@ def test_variables_content(info_plist):
         "show_unfilled_attributes",
         "entry_delimiter",
         "show_passwords",
+        "show_totp_request",
     ]
 
     all_variables = non_empty_variables + empty_variables

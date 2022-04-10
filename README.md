@@ -37,8 +37,9 @@
 
 ## Features
 
-- Search KeepassXC entries
-- Copy different entry attributes. It includes title, username, password, url, notes
+- Search KeepassXC entries.
+- Copy different entry attributes. It includes title, username, password, url, notes.
+- Request TOTP for KeepassXC entries.
 - Comfortable configuration using Alfred's UI and MacOS modal windows
 - There are different settings for displaying KeepassXC data in Alfred.
   For example, you can show KeepassXC attributes which you want.

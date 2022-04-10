@@ -81,6 +81,7 @@ class Settings(metaclass=SettingsMeta):
     SHOW_PASSWORDS = SettingsAttr(env_name="show_passwords", cast_to=cast_value_to_bool)
     ENTRY_DELIMITER = SettingsAttr(env_name="entry_delimiter")
     PYTHON_PATH = SettingsAttr(env_name="python_path", required=True)
+    SHOW_TOTP_REQUEST = SettingsAttr(env_name="show_totp_request", cast_to=cast_value_to_bool)
 
     def validate(self) -> None:
         """

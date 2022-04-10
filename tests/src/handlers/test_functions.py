@@ -3,11 +3,13 @@ from collections import namedtuple
 
 import pytest
 
+from alfred import AlfredModActionEnum
 from handlers import (
     fetch_handler,
     list_settings_handler,
     require_password,
     search_handler,
+    totp_handler,
     validate_settings,
 )
 from helpers import cast_bool_to_yesno
@@ -426,6 +428,36 @@ class TestFetchHandler:
         )
         mod_instance_mock.add_variable.assert_called_once_with("USER_ACTION", "mod")
 
+    @pytest.mark.parametrize("show_totp_request, is_there_totp_request", [("true", True), ("false", False)])
+    def test_totp_request(
+        self,
+        valid_settings,
+        environ_factory,
+        keepassxc_item,
+        keepassxc_client,
+        mocker,
+        show_totp_request,
+        is_there_totp_request,
+    ):
+        environ_factory(show_totp_request=show_totp_request, desired_attributes="password")
+        keepassxc_item.password = "password"
+        mocker.patch.object(keepassxc_client, "show", return_value=keepassxc_item)
+        mocker.patch("handlers.initialize_keepassxc_client", return_value=keepassxc_client)
+        add_item_mock = mocker.patch("handlers.AlfredScriptFilter.add_item")
+        mocker.patch("handlers.AlfredScriptFilter.send")
+        parsed_args = namedtuple("parsed_args", "query")
+        fetch_handler(parsed_args)
+
+        if is_there_totp_request:
+            assert add_item_mock.call_count == 3  # back button, password and totp
+            add_item_mock.assert_any_call(
+                title="TOTP",
+                subtitle="Press Enter to request TOTP.",
+                arg="totp",
+            )
+        else:
+            assert add_item_mock.call_count == 2  # back button, password
+
 
 class TestListSettingsHandler:
     def test_added_items(self, mocker, valid_settings):
@@ -512,4 +544,54 @@ class TestListSettingsHandler:
             arg=valid_settings.PYTHON_PATH.name,
         )
 
-        assert add_item_mock.call_count == 13
+        add_item_mock.add_item(
+            title="Display TOTP request",
+            subtitle=cast_bool_to_yesno(valid_settings.SHOW_TOTP_REQUEST.value),
+            arg=valid_settings.SHOW_TOTP_REQUEST.name,
+        )
+
+        assert add_item_mock.call_count == 14
+
+
+class TestTotpHandler:
+    def test_kp_client_error(self, mocker, valid_settings, keepassxc_client):
+        mocker.patch.object(keepassxc_client, "totp", side_effect=OSError)
+        mocker.patch("handlers.initialize_keepassxc_client", return_value=keepassxc_client)
+        add_item_mock = mocker.patch("handlers.AlfredScriptFilter.add_item")
+        send_mock = mocker.patch("handlers.AlfredScriptFilter.send")
+        parsed_args = namedtuple("parsed_args", "query")
+
+        with pytest.raises(OSError):
+            totp_handler(parsed_args)
+
+        add_item_mock.assert_called_with(
+            title="There is no configured TOTP or something went wrong.",
+            is_valid=False,
+        )
+        send_mock.assert_called_once()
+
+    def test_success_output(self, mocker, valid_settings, keepassxc_client):
+        actual_totp = "123"
+        expected_totp = actual_totp
+        mocker.patch.object(keepassxc_client, "totp", return_value=actual_totp)
+        mocker.patch("handlers.initialize_keepassxc_client", return_value=keepassxc_client)
+        add_item_mock = mocker.patch("handlers.AlfredScriptFilter.add_item")
+        send_mock = mocker.patch("handlers.AlfredScriptFilter.send")
+        alfred_mod = mocker.patch("handlers.AlfredMod")
+        alfred_mod_instance = alfred_mod.return_value
+        parsed_args = namedtuple("parsed_args", "query")
+        totp_handler(parsed_args)
+
+        add_item_mock.assert_called_with(
+            title=expected_totp,
+            mods=[alfred_mod_instance],
+            subtitle="Press Enter to copy the TOTP.",
+            arg=expected_totp,
+        )
+        alfred_mod.assert_called_with(
+            action=AlfredModActionEnum.CMD,
+            subtitle="Copy and paste to front most app.",
+            arg=expected_totp,
+        )
+        alfred_mod_instance.add_variable.assert_called_with("USER_ACTION", "mod")
+        send_mock.assert_called_once()
