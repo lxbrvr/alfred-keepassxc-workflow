@@ -8,7 +8,7 @@
   <p>Alfred workflow for fetching KeepassXC entries and coping their attributes.</p>
 
   <p>
-    <a href="https://github.com/lxbrvr/alfred-keepassxc-workflow/releases/download/2.0.0/keepassxc-2.0.0.alfredworkflow">Download the latest version (2.0.0)</a>
+    <a href="https://github.com/lxbrvr/alfred-keepassxc-workflow/releases/download/2.1.0/keepassxc-2.1.0.alfredworkflow">Download the latest version (2.1.0)</a>
   </p>
 </div>
 

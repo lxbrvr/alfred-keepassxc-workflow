@@ -1315,7 +1315,7 @@ $python_path cli.py totp "${KP_ITEM_PATH}"</string>
 		<string>entry_delimiter</string>
 	</array>
 	<key>version</key>
-	<string>2.0.0</string>
+	<string>2.1.0</string>
 	<key>webaddress</key>
 	<string>https://github.com/lxbrvr/alfred-keepassxc-workflow</string>
 </dict>
