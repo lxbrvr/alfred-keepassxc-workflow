@@ -419,7 +419,9 @@
 				<key>runningsubtext</key>
 				<string></string>
 				<key>script</key>
-				<string>osascript -l JavaScript settings.js checkPython &amp;&amp; $python_path cli.py search "$1"</string>
+				<string>osascript -l JavaScript settings.js checkPython &amp;&amp;  \
+osascript -l JavaScript settings.js checkKeepassXC &amp;&amp;  \
+$python_path cli.py search "$1"</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -466,7 +468,9 @@
 				<key>runningsubtext</key>
 				<string></string>
 				<key>script</key>
-				<string>osascript -l JavaScript settings.js checkPython &amp;&amp; $python_path cli.py fetch "${KP_ITEM_PATH}"</string>
+				<string>osascript -l JavaScript settings.js checkPython &amp;&amp;  \
+osascript -l JavaScript settings.js checkKeepassXC &amp;&amp;  \
+$python_path cli.py fetch "${KP_ITEM_PATH}"</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>

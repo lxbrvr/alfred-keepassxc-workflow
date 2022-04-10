@@ -15,6 +15,11 @@ let CancelError = new Error()
 const cancelErrorNumber = -128 // macos error code for cancel
 CancelError.errorNumber = cancelErrorNumber
 
+const pythonRequiredMajorVersion = 3
+const pythonRequiredMinorVersion = 6
+const keepassxcRequiredMajorVersion = 2
+const keepassxcRequiredMinorVersion = 7
+
 
 function isFileExists(path) {
     try {
@@ -247,7 +252,8 @@ function askKeepassXCDBPath() {
 
 
 function askKeepassXCCLIPath() {
-    return askFile("Select executable KeepassXC CLI file").toString()
+    let kpCliPath = askFile("Select executable KeepassXC CLI file").toString()
+    return askDependencyPathIfNecessary("KeepassXC CLI", kpCliPath)
 }
 
 
@@ -531,9 +537,8 @@ function askAlfredKeyword() {
 
 
 function askPythonPath() {
-    let message = "Select the python interpreter. Python must be 3.6+ version."
-    let pythonPath = askFile(message).toString()
-    return askPythonPathAgainIfNecessary(pythonPath)
+    let pythonPath = askFile("Select the Python").toString()
+    return askDependencyPathIfNecessary("Python", pythonPath)
 }
 
 
@@ -611,77 +616,133 @@ function init() {
     showMessage("The initialization was successful.")
 }
 
+
+function tryFindOutKeepassXCCLIVersion(keepassxcPath) {
+    if (!isFileExists(keepassxcPath)) {
+        throw new Error(`${keepassxcPath} not found.`)
+    }
+
+    try {
+        return app.doShellScript(`${keepassxcPath} -v`)
+    } catch (err) {
+        return ""
+    }
+}
+
+
 /**
  * Before python3.4 "python -V" sent output to stderr.
  * Since python3.4 it sends to stdout.
  * So first it tries to get the version from stdout and then from stderr.
  */
-function execPythonVForPythonInterpreter(pythonPath) {
-    try {
-        let commandOutput = app.doShellScript(`${pythonPath} -V`)
-
-        if (!commandOutput) {
-            commandOutput = app.doShellScript(`${pythonPath} -V 2>&1`)
-        }
-
-        return commandOutput
-    } catch (err) {}
-}
-
-
 function tryFindOutPythonVersion(pythonPath) {
     if (!isFileExists(pythonPath)) {
         throw new Error(`${pythonPath} not found.`)
     }
 
-    let pythonVOutput = execPythonVForPythonInterpreter(pythonPath)
+    let pythonVOutput = ""
+
+    try {
+        pythonVOutput = app.doShellScript(`${pythonPath} -V`)
+
+        if (!pythonVOutput) {
+            pythonVOutput = app.doShellScript(`${pythonPath} -V 2>&1`)
+        }
+
+    } catch (err) {
+        pythonVOutput = ""
+    }
 
     if (!pythonVOutput) {
         throw new Error(`${pythonPath} does not seem to be a python interpreter.`)
     }
 
-    let [name, version] = pythonVOutput.split(" ")
+    let [name, actualVersion] = pythonVOutput.split(" ")
 
-    if (name !== "Python" || !version) {
+    if (name !== "Python" || !actualVersion) {
         throw new Error(`${pythonPath} does not seem to be a valid python interpreter.`)
     }
 
-    let majorPythonVersion = parseInt(version.split(".")[0])
-    let minorPythonVersion = parseInt(version.split(".")[1])
+    return actualVersion
+}
+
+
+function checkDependencyVersion(dependencyName, requiredMajorVersion, requiredMinorVersion, actualVersion) {
+    let majorPythonVersion = parseInt(actualVersion.split(".")[0])
+    let minorPythonVersion = parseInt(actualVersion.split(".")[1])
 
     if (!majorPythonVersion || !minorPythonVersion) {
-        throw new Error("Python version is incorrect.")
+        throw new Error(`${dependencyName} version is incorrect.`)
     }
 
-    let isValidPythonVersion = (majorPythonVersion === 3 && minorPythonVersion >= 6)
+    let isValidMajorVersion = requiredMajorVersion === majorPythonVersion
+    let isValidMinorVersion = requiredMinorVersion <= minorPythonVersion
+    let isValidVersion = isValidMajorVersion && isValidMinorVersion
 
-    if (!isValidPythonVersion) {
-        throw new Error(`Python version is incorrect. Python 3.6+ is required but the selected one is ${version}.`)
+    if (!isValidVersion) {
+        let message = [
+           `${dependencyName} version is incorrect. ${dependencyName} ${requiredMajorVersion}.${requiredMinorVersion}+ `,
+           `is required but the selected one is ${actualVersion}.`,
+        ].join("")
+
+        throw new Error(message)
     }
 }
 
 
-function askPythonPathAgainIfNecessary(pythonPath) {
+function askDependencyPathIfNecessary(dependencyName, cliPath = "") {
+    let dependencyData = {
+        "Python": {
+            "versionExtractor": tryFindOutPythonVersion,
+            "requiredMajorVersion": pythonRequiredMajorVersion,
+            "requiredMinorVersion": pythonRequiredMinorVersion,
+            "defaultCliPath": Settings.PYTHON_PATH,
+        },
+        "KeepassXC CLI": {
+            "versionExtractor": tryFindOutKeepassXCCLIVersion,
+            "requiredMajorVersion": keepassxcRequiredMajorVersion,
+            "requiredMinorVersion": keepassxcRequiredMinorVersion,
+            "defaultCliPath": Settings.KEEPASSXC_CLI_PATH,
+        },
+    }[dependencyName]
+
+    let versionExtractor = dependencyData["versionExtractor"]
+    let requiredMajorVersion = dependencyData["requiredMajorVersion"]
+    let requiredMinorVersion = dependencyData["requiredMinorVersion"]
+    let defaultCliPath = dependencyData["defaultCliPath"]
+    let dependencyCliPath = cliPath || defaultCliPath
+
     try {
-        tryFindOutPythonVersion(pythonPath)
+        let actualVersion = versionExtractor(dependencyCliPath)
+        checkDependencyVersion(dependencyName, requiredMajorVersion, requiredMinorVersion, actualVersion)
     } catch (err) {
-        let firstModalMessage = err.message + " Select a correct python interpreter."
+        let firstModalMessage = err.message + ` Select a correct ${dependencyName}.`
         showDialog(firstModalMessage, ["Select..."])
-        let secondModalMessage = "Select the python interpreter. Python must be 3.6+ version."
-        let pythonPath = askFile(secondModalMessage).toString()
-        return askPythonPathAgainIfNecessary(pythonPath)
+        let secondModalMessage = `Select the ${dependencyName}.`
+        let updatedCliPath = askFile(secondModalMessage).toString()
+        return askDependencyPathIfNecessary(dependencyName, updatedCliPath)
     }
 
-    return pythonPath
+    return dependencyCliPath
 }
 
 
-function checkPythonPath() {
-    let pythonPath = askPythonPathAgainIfNecessary(Settings.PYTHON_PATH)
+function checkPython() {
+    let pythonPath = askDependencyPathIfNecessary("Python")
 
     if (pythonPath !== Settings.PYTHON_PATH) {
         setEnv(EnvNames.PYTHON_PATH, pythonPath)
         showMessage("The python interpreter was changed successfully.")
+    }
+}
+
+
+function checkKeepassXC() {
+    let keepassxcPath = askDependencyPathIfNecessary("KeepassXC CLI")
+
+    if (keepassxcPath !== Settings.KEEPASSXC_CLI_PATH) {
+        setEnv(EnvNames.KEEPASSXC_CLI_PATH, keepassxcPath)
+        showMessage("The KeepassXC CLI path was changed successfully.")
     }
 }
 
@@ -691,7 +752,8 @@ function getActionFuncByName(actionName) {
         change: changeSettingKey,
         reset: resetSettings,
         init: init,
-        checkPython: checkPythonPath,
+        checkPython: checkPython,
+        checkKeepassXC: checkKeepassXC,
     }
 
     return actionFuncsMap[actionName]
