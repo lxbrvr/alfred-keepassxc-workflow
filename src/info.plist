@@ -22,7 +22,7 @@
 			</dict>
 			<dict>
 				<key>destinationuid</key>
-				<string>9131D8B1-D408-4126-91D4-88493D169CE2</string>
+				<string>8F5CF158-9328-49B3-BC0C-03C3F12CFF7F</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -36,6 +36,19 @@
 			<dict>
 				<key>destinationuid</key>
 				<string>84EEC3D2-213E-4ACC-A6D7-69981CB64510</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>1F3CC929-CA46-411B-BD67-A40AABFBB308</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>8F5CF158-9328-49B3-BC0C-03C3F12CFF7F</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -86,7 +99,7 @@
 			</dict>
 			<dict>
 				<key>destinationuid</key>
-				<string>9131D8B1-D408-4126-91D4-88493D169CE2</string>
+				<string>8F5CF158-9328-49B3-BC0C-03C3F12CFF7F</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -157,7 +170,7 @@
 				<false/>
 			</dict>
 		</array>
-		<key>9131D8B1-D408-4126-91D4-88493D169CE2</key>
+		<key>8F5CF158-9328-49B3-BC0C-03C3F12CFF7F</key>
 		<array/>
 		<key>C5304F2E-3703-45AE-985B-3D66C24D07E4</key>
 		<array>
@@ -689,7 +702,7 @@ $python_path cli.py fetch "${KP_ITEM_PATH}"</string>
 				<key>autopaste</key>
 				<true/>
 				<key>clipboardtext</key>
-				<string>{query}</string>
+				<string></string>
 				<key>ignoredynamicplaceholders</key>
 				<false/>
 				<key>transient</key>
@@ -931,21 +944,25 @@ $python_path cli.py totp "${KP_ITEM_PATH}"</string>
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>autopaste</key>
-				<false/>
-				<key>clipboardtext</key>
-				<string>{query}</string>
-				<key>ignoredynamicplaceholders</key>
-				<false/>
-				<key>transient</key>
+				<key>concurrently</key>
 				<true/>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>script</key>
+				<string>osascript -l JavaScript clip.js "$1" $clipboard_timeout</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>0</integer>
 			</dict>
 			<key>type</key>
-			<string>alfred.workflow.output.clipboard</string>
+			<string>alfred.workflow.action.script</string>
 			<key>uid</key>
-			<string>9131D8B1-D408-4126-91D4-88493D169CE2</string>
+			<string>8F5CF158-9328-49B3-BC0C-03C3F12CFF7F</string>
 			<key>version</key>
-			<integer>3</integer>
+			<integer>2</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -1180,14 +1197,14 @@ $python_path cli.py totp "${KP_ITEM_PATH}"</string>
 			<key>ypos</key>
 			<integer>330</integer>
 		</dict>
-		<key>9131D8B1-D408-4126-91D4-88493D169CE2</key>
+		<key>8F5CF158-9328-49B3-BC0C-03C3F12CFF7F</key>
 		<dict>
 			<key>note</key>
 			<string>Copies a selected attribute to clipboard</string>
 			<key>xpos</key>
 			<integer>1010</integer>
 			<key>ypos</key>
-			<integer>490</integer>
+			<integer>505</integer>
 		</dict>
 		<key>C5304F2E-3703-45AE-985B-3D66C24D07E4</key>
 		<dict>
@@ -1271,6 +1288,8 @@ $python_path cli.py totp "${KP_ITEM_PATH}"</string>
 	<dict>
 		<key>alfred_keyword</key>
 		<string>kp</string>
+		<key>clipboard_timeout</key>
+		<string></string>
 		<key>desired_attributes</key>
 		<string></string>
 		<key>entry_delimiter</key>
@@ -1301,8 +1320,9 @@ $python_path cli.py totp "${KP_ITEM_PATH}"</string>
 	<key>variablesdontexport</key>
 	<array>
 		<string>keepassxc_db_path</string>
-		<string>keepassxc_master_password</string>
 		<string>show_totp_request</string>
+		<string>keepassxc_master_password</string>
+		<string>keychain_service</string>
 		<string>show_unfilled_attributes</string>
 		<string>show_attribute_values</string>
 		<string>keychain_account</string>
@@ -1311,7 +1331,7 @@ $python_path cli.py totp "${KP_ITEM_PATH}"</string>
 		<string>python_path</string>
 		<string>desired_attributes</string>
 		<string>show_passwords</string>
-		<string>keychain_service</string>
+		<string>clipboard_timeout</string>
 		<string>entry_delimiter</string>
 	</array>
 	<key>version</key>

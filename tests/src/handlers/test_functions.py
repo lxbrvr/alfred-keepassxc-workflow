@@ -550,7 +550,13 @@ class TestListSettingsHandler:
             arg=valid_settings.SHOW_TOTP_REQUEST.name,
         )
 
-        assert add_item_mock.call_count == 14
+        add_item_mock.add_item(
+            title="Clipboard timeout (in seconds)",
+            subtitle=valid_settings.CLIPBOARD_TIMEOUT.raw_value,
+            arg=valid_settings.CLIPBOARD_TIMEOUT.name,
+        )
+
+        assert add_item_mock.call_count == 15
 
 
 class TestTotpHandler:

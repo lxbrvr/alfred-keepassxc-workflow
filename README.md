@@ -49,6 +49,7 @@
 - It saves your KeepassXC master password to OSX Keychain.
 - No dependencies. Only Alfred and KeepassXC.
 - Automatically paste entry attributes to front most app with `Command ⌘ + Return ↵`.
+- Clipboard timeout.
 
 ## Installation
 

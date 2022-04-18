@@ -13,6 +13,7 @@ def test_not_allowed_to_export_envs(info_plist):
         "entry_delimiter",
         "show_passwords",
         "python_path",
+        "clipboard_timeout",
     ]
 
     assert actual_variables.sort() == expected_variables.sort()
@@ -34,6 +35,7 @@ def test_variables_content(info_plist):
         "entry_delimiter",
         "show_passwords",
         "show_totp_request",
+        "clipboard_timeout",
     ]
 
     all_variables = non_empty_variables + empty_variables

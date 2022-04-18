@@ -201,6 +201,12 @@ def list_settings_handler(_: argparse.Namespace) -> None:  # _ - it's parsed arg
     )
 
     script_filter.add_item(
+        title="Clipboard timeout (in seconds)",
+        subtitle=settings.CLIPBOARD_TIMEOUT.raw_value,
+        arg=settings.CLIPBOARD_TIMEOUT.name,
+    )
+
+    script_filter.add_item(
         title="Display TOTP request",
         subtitle=cast_bool_to_yesno(settings.SHOW_TOTP_REQUEST.value),
         arg=settings.SHOW_TOTP_REQUEST.name,

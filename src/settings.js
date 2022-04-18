@@ -64,6 +64,7 @@ const EnvNames = Object.freeze({
     ENTRY_DELIMITER: "entry_delimiter",
     PYTHON_PATH: "python_path",
     SHOW_TOTP_REQUEST: "show_totp_request",
+    CLIPBOARD_TIMEOUT: "clipboard_timeout",
 })
 
 
@@ -82,6 +83,7 @@ const Settings = {
     ENTRY_DELIMITER: getenv(EnvNames.ENTRY_DELIMITER),
     PYTHON_PATH: getenv(EnvNames.PYTHON_PATH),
     SHOW_TOTP_REQUEST: getenv(EnvNames.SHOW_TOTP_REQUEST),
+    CLIPBOARD_TIMEOUT: getenv(EnvNames.CLIPBOARD_TIMEOUT),
 }
 
 
@@ -100,6 +102,7 @@ const DefaultEnvValues = {
     [EnvNames.ENTRY_DELIMITER]: " › ",
     [EnvNames.PYTHON_PATH]: "/usr/bin/python3",
     [EnvNames.SHOW_TOTP_REQUEST]: "true",
+    [EnvNames.CLIPBOARD_TIMEOUT]: "10",  // default value from KeepassXC
 }
 
 
@@ -119,6 +122,7 @@ function isDefaultSettings() {
         Settings.ENTRY_DELIMITER === DefaultEnvValues[EnvNames.ENTRY_DELIMITER],
         Settings.PYTHON_PATH === DefaultEnvValues[EnvNames.PYTHON_PATH],
         Settings.SHOW_TOTP_REQUEST === DefaultEnvValues[EnvNames.SHOW_TOTP_REQUEST],
+        Settings.CLIPBOARD_TIMEOUT === DefaultEnvValues[EnvNames.CLIPBOARD_TIMEOUT],
     ].every(Boolean)
 }
 
@@ -139,6 +143,7 @@ function isEmptySettings() {
         Settings.ENTRY_DELIMITER === "",
         Settings.PYTHON_PATH === DefaultEnvValues[EnvNames.PYTHON_PATH],
         Settings.SHOW_TOTP_REQUEST === "",
+        Settings.CLIPBOARD_TIMEOUT === "",
     ].every(Boolean)
 }
 
@@ -550,6 +555,7 @@ function askPythonPath() {
 function askShowTotpRequest() {
     let message = [
         "By default, the workflow provides the option to request a TOTP for KeepassXC entries.",
+        "\n",
         "If you do not use it, you can hide this feature.",
         "\n\n",
         "Display the TOTP request option?",
@@ -557,6 +563,37 @@ function askShowTotpRequest() {
 
     return askYesOrNo(message)
 }
+
+
+function askClipboardTimeout(errorMessage="") {
+    let maxTimeout = 999  // the same limit in KeepassXC UI
+    let minTimeout = 0
+    let unlimitedTimeout = 0
+
+    let message = [
+        errorMessage? `${errorMessage}\n\n`: "",
+        "Timeout in seconds before clearing the clipboard.",
+        "\n",
+        `The maximum timeout is ${maxTimeout} seconds.`,
+        "\n",
+        `Set to ${unlimitedTimeout} for unlimited.`,
+    ].join("")
+
+    let dialogOptions = {requiredText: true, defaultAnswer: Settings.CLIPBOARD_TIMEOUT}
+    let timeout = askText(message, dialogOptions)
+    let parsedTimeout = parseInt(timeout)
+
+    if (!parsedTimeout && parsedTimeout !== 0) {
+        return askClipboardTimeout("The value must be integer.")
+    }
+
+    if (parsedTimeout < minTimeout || parsedTimeout > maxTimeout) {
+        return askClipboardTimeout("The value must be from 0 to 999.")
+    }
+
+    return parsedTimeout
+}
+
 
 function setEnv(key, value, exportable=false) {
     let alfredApp = Application('com.runningwithcrayons.Alfred')
@@ -586,6 +623,7 @@ function changeSettingKey(argv) {
         [EnvNames.ENTRY_DELIMITER]: askEntryDelimiter,
         [EnvNames.PYTHON_PATH]: askPythonPath,
         [EnvNames.SHOW_TOTP_REQUEST]: askShowTotpRequest,
+        [EnvNames.CLIPBOARD_TIMEOUT]: askClipboardTimeout,
     }
 
     let response = dialogsMap[settingKey]()
