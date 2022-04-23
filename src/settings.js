@@ -190,6 +190,7 @@ function showMessage(message) {
     })
 }
 
+
 function showErrorAndExit(message) {
     showMessage(message)
     throw CancelError
@@ -809,6 +810,7 @@ function getActionFuncByName(actionName) {
         init: init,
         checkPython: checkPython,
         checkKeepassXC: checkKeepassXC,
+        showMessage: function(argv) {showMessage(argv[0])},
     }
 
     return actionFuncsMap[actionName]

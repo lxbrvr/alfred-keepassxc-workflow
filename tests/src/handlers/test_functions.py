@@ -400,7 +400,7 @@ class TestFetchHandler:
         add_item_mock.assert_any_call(title="← Back", subtitle="Back to search", arg="back")
         assert add_item_mock.call_count == 6  # 1 is back button
 
-        for attribute in ["title", "username", "password", "url", "notes"]:
+        for attribute in ["title", "username", "password", "url"]:
             add_item_mock.assert_any_call(
                 title=attribute.title(),
                 subtitle=expected_subtitle,
@@ -409,7 +409,15 @@ class TestFetchHandler:
                 mods=[alfred_mod_instance],
             )
 
-    def test_mod(self, valid_settings, environ_factory, keepassxc_item, keepassxc_client, mocker):
+        add_item_mock.assert_any_call(
+            title="Notes",
+            subtitle=expected_subtitle,
+            is_valid=True,
+            arg=keepassxc_item_values,
+            mods=[alfred_mod_instance, alfred_mod_instance],
+        )
+
+    def test_cmd_mod(self, valid_settings, environ_factory, keepassxc_item, keepassxc_client, mocker):
         environ_factory(desired_attributes="password", show_unfilled_attributes="yes")
         keepassxc_item.password = "password"
         mocker.patch.object(keepassxc_client, "show", return_value=keepassxc_item)
@@ -426,7 +434,7 @@ class TestFetchHandler:
             subtitle="Copy and paste to front most app.",
             arg=keepassxc_item.password,
         )
-        mod_instance_mock.add_variable.assert_called_once_with("USER_ACTION", "mod")
+        mod_instance_mock.add_variable.assert_called_once_with("USER_ACTION", "cmd")
 
     @pytest.mark.parametrize("show_totp_request, is_there_totp_request", [("true", True), ("false", False)])
     def test_totp_request(
@@ -457,6 +465,59 @@ class TestFetchHandler:
             )
         else:
             assert add_item_mock.call_count == 2  # back button, password
+
+    @pytest.mark.parametrize(
+        "is_notes_desired, notes_content, has_alt_call",
+        [
+            (True, "", False),
+            (True, "notes", True),
+            (False, "", False),
+            (False, "notes", False),
+        ],
+    )
+    def test_alt_notes_mod(
+        self,
+        valid_settings,
+        environ_factory,
+        keepassxc_item,
+        keepassxc_client,
+        mocker,
+        is_notes_desired,
+        notes_content,
+        has_alt_call,
+    ):
+        desired_attrs = "password"
+
+        if is_notes_desired:
+            desired_attrs += ",notes"
+
+        environ_factory(desired_attributes=desired_attrs, show_unfilled_attributes="yes")
+        keepassxc_item.password = "password"
+        keepassxc_item.notes = notes_content
+        mocker.patch.object(keepassxc_client, "show", return_value=keepassxc_item)
+        mocker.patch("handlers.initialize_keepassxc_client", return_value=keepassxc_client)
+        mocker.patch("handlers.AlfredScriptFilter.add_item")
+        mocker.patch("handlers.AlfredScriptFilter.send")
+        mod_mock = mocker.patch("handlers.AlfredMod")
+        mod_instance_mock = mod_mock.return_value
+        parsed_args = namedtuple("parsed_args", "query")
+        fetch_handler(parsed_args)
+
+        expected_call = mocker.call(
+            action="alt",
+            subtitle="Show full text.",
+            arg=keepassxc_item.notes,
+        )
+
+        if has_alt_call:
+            mod_mock.assert_has_calls([expected_call])
+            mod_instance_mock.add_variable.assert_any_call("USER_ACTION", "alt_notes")
+        else:
+            try:
+                mod_mock.assert_has_calls([expected_call])
+                mod_instance_mock.add_variable.assert_any_call("USER_ACTION", "alt_notes")
+            except AssertionError:
+                pass
 
 
 class TestListSettingsHandler:

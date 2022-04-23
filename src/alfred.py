@@ -5,6 +5,7 @@ import typing as t
 
 class AlfredModActionEnum:
     CMD = "cmd"
+    ALT = "alt"
 
 
 class AlfredMod:

@@ -115,9 +115,20 @@ def fetch_handler(parsed_args: argparse.Namespace) -> None:
         title += " (empty)" if kp_entry.is_empty(entry_value) else ""
         subtitle = subtitle if settings.SHOW_ATTRIBUTE_VALUES.value else None
         is_valid = False if kp_entry.is_empty(entry_value) else True
-        mod = AlfredMod(action=AlfredModActionEnum.CMD, subtitle="Copy and paste to front most app.", arg=entry_value)
-        mod.add_variable("USER_ACTION", "mod")
-        script_filter.add_item(title=title, subtitle=subtitle, is_valid=is_valid, arg=entry_value, mods=[mod])
+
+        mods = []
+        copypaste_mod = AlfredMod(
+            action=AlfredModActionEnum.CMD, subtitle="Copy and paste to front most app.", arg=entry_value
+        )
+        copypaste_mod.add_variable("USER_ACTION", "cmd")
+        mods.append(copypaste_mod)
+
+        if desired_attr == "notes" and entry_value:
+            mod = AlfredMod(action=AlfredModActionEnum.ALT, subtitle="Show full text.", arg=entry_value)
+            mod.add_variable("USER_ACTION", "alt_notes")
+            mods.append(mod)
+
+        script_filter.add_item(title=title, subtitle=subtitle, is_valid=is_valid, arg=entry_value, mods=mods)
 
     script_filter.send()
 

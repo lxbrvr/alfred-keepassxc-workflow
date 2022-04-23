@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added 
 
 - Clipboard timeout.
+- Show note details in full text with ``Command ⌘ + Opt ⌥``.
 
 ## [2.1.0] - 2022-04-10
 
