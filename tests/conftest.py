@@ -4,6 +4,7 @@ import pytest
 
 from alfred import AlfredScriptFilter
 from conf import Settings
+from helpers import Version
 from services import KeepassXCClient, KeepassXCItem
 
 
@@ -103,3 +104,11 @@ def keepassxc_client():
         key_file="/key/path",
         password="password",
     )
+
+
+@pytest.fixture
+def version_factory():
+    def factory(version="1.2.3"):
+        return Version(version)
+
+    yield factory

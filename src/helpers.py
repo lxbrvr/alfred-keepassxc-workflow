@@ -30,3 +30,34 @@ def cast_bool_to_yesno(value: bool) -> str:
     """Returns "Yes" if a passed boolean value is True else False."""
 
     return "Yes" if value is True else "No"
+
+
+class Version:
+    """Provides the interface for working with semantic versions."""
+
+    def __init__(self, version: str) -> None:
+        self.raw_version = version
+
+    @property
+    def raw(self) -> str:
+        """Returns the version as it was passed."""
+
+        return self.raw_version
+
+    @property
+    def tuple(self) -> t.Tuple[int, int, int]:
+        """Converts the raw version to numerical tuple."""
+
+        major, minor, patch = self.raw_version.split(".")
+        return int(major), int(minor), int(patch)
+
+    def __gt__(self, other: "Version") -> bool:
+        return self.tuple > other.tuple
+
+    def __lt__(self, other: "Version") -> bool:
+        return self.tuple < other.tuple
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Version):
+            return NotImplemented
+        return self.tuple == other.tuple

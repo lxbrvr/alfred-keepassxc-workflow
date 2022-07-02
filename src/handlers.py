@@ -1,10 +1,11 @@
 import argparse
+import subprocess
 import typing as t
 
 from alfred import AlfredMod, AlfredModActionEnum, AlfredScriptFilter
 from conf import settings
 from helpers import cast_bool_to_yesno
-from services import initialize_keepassxc_client
+from services import WorkflowUpdatesChecker, initialize_keepassxc_client
 
 
 def require_password(func: t.Callable[..., None]) -> t.Callable[..., None]:
@@ -154,7 +155,36 @@ def totp_handler(parsed_args: argparse.Namespace) -> None:
     script_filter.send()
 
 
-def list_settings_handler(_: argparse.Namespace) -> None:  # _ - it's parsed args without usage
+def check_for_updates_handler(_: argparse.Namespace) -> None:
+    """Check for updates for the workflow.
+
+    The new release message will be shown to the user after 30 seconds if this
+    handler was run in the background. This behavior is intended not to interrupt
+    the user's current interaction with Alfred. Of course, this does not give
+    guarantees, but it reduces this probability.
+    """
+
+    release_checker = WorkflowUpdatesChecker()
+
+    try:
+        has_new_version = release_checker.has_new_version()
+    except Exception:
+        message = f"An error occurred while trying to check for updates. Please try again later."
+        command = ["osascript", "-l", "JavaScript", "settings.js", "showMessage", message]
+        subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, stdin=subprocess.PIPE)
+        return
+
+    if has_new_version:
+        latest_version = release_checker.fetch_latest_version()
+        command = ["osascript", "-l", "JavaScript", "settings.js", "announceNewRelease", latest_version.raw]
+        subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, stdin=subprocess.PIPE)
+    else:
+        message = f"Version {release_checker.current_version.raw} is the newest version available at the moment."
+        command = ["osascript", "-l", "JavaScript", "settings.js", "showMessage", message]
+        subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, stdin=subprocess.PIPE)
+
+
+def list_settings_handler(_: argparse.Namespace) -> None:
     """Collects a list with global settings and sends it for the Alfred's script filter."""
 
     script_filter = AlfredScriptFilter()

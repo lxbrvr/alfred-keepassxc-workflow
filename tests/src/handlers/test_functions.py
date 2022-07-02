@@ -1,10 +1,12 @@
 import argparse
+import subprocess
 from collections import namedtuple
 
 import pytest
 
 from alfred import AlfredModActionEnum
 from handlers import (
+    check_for_updates_handler,
     fetch_handler,
     list_settings_handler,
     require_password,
@@ -662,3 +664,57 @@ class TestTotpHandler:
         )
         alfred_mod_instance.add_variable.assert_called_with("USER_ACTION", "mod")
         send_mock.assert_called_once()
+
+
+class TestCheckForUpdatesHandler:
+    def test_no_version(self, mocker, version_factory):
+        popen_mock = mocker.patch("handlers.subprocess.Popen")
+        mocker.patch.multiple(
+            "handlers.WorkflowUpdatesChecker",
+            current_version=mocker.PropertyMock(return_value=version_factory("1.2.3")),
+            has_new_version=mocker.Mock(return_value=False),
+        )
+
+        check_for_updates_handler(mocker.Mock())
+
+        expected_message = "Version 1.2.3 is the newest version available at the moment."
+        popen_mock.assert_called_once_with(
+            ["osascript", "-l", "JavaScript", "settings.js", "showMessage", expected_message],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            stdin=subprocess.PIPE,
+        )
+
+    def test_exception(self, mocker):
+        popen_mock = mocker.patch("handlers.subprocess.Popen")
+        mocker.patch.multiple(
+            "handlers.WorkflowUpdatesChecker",
+            has_new_version=mocker.Mock(side_effect=Exception()),
+        )
+
+        check_for_updates_handler(mocker.Mock())
+
+        expected_message = "An error occurred while trying to check for updates. Please try again later."
+        popen_mock.assert_called_once_with(
+            ["osascript", "-l", "JavaScript", "settings.js", "showMessage", expected_message],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            stdin=subprocess.PIPE,
+        )
+
+    def test_new_version(self, mocker, version_factory):
+        popen_mock = mocker.patch("handlers.subprocess.Popen")
+        mocker.patch.multiple(
+            "handlers.WorkflowUpdatesChecker",
+            has_new_version=mocker.Mock(return_value=True),
+            fetch_latest_version=mocker.Mock(return_value=version_factory("1.2.3")),
+        )
+
+        check_for_updates_handler(mocker.Mock())
+
+        popen_mock.assert_called_once_with(
+            ["osascript", "-l", "JavaScript", "settings.js", "announceNewRelease", "1.2.3"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            stdin=subprocess.PIPE,
+        )

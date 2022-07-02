@@ -120,6 +120,19 @@
 				<false/>
 			</dict>
 		</array>
+		<key>59CD2005-E03D-44C0-8977-B964668AFDF6</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>35C9A087-CB68-4583-833E-02CABDE404F8</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 		<key>7146D7E9-9CC8-4AB4-A4CD-DE15B707908C</key>
 		<array>
 			<dict>
@@ -1141,6 +1154,51 @@ $python_path cli.py totp "${KP_ITEM_PATH}"</string>
 			<key>version</key>
 			<integer>1</integer>
 		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>2</integer>
+				<key>keyword</key>
+				<string>{var:alfred_keyword}:updates</string>
+				<key>subtext</key>
+				<string>Check for updates for the workflow.</string>
+				<key>text</key>
+				<string>Check for updates</string>
+				<key>withspace</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.keyword</string>
+			<key>uid</key>
+			<string>59CD2005-E03D-44C0-8977-B964668AFDF6</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>script</key>
+				<string>osascript -l JavaScript settings.js checkPython &amp;&amp;  \
+$python_path cli.py check_for_updates</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>35C9A087-CB68-4583-833E-02CABDE404F8</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
 	</array>
 	<key>readme</key>
 	<string></string>
@@ -1177,6 +1235,15 @@ $python_path cli.py totp "${KP_ITEM_PATH}"</string>
 			<integer>1010</integer>
 			<key>ypos</key>
 			<integer>145</integer>
+		</dict>
+		<key>35C9A087-CB68-4583-833E-02CABDE404F8</key>
+		<dict>
+			<key>note</key>
+			<string>Runs the script for updates checking</string>
+			<key>xpos</key>
+			<integer>370</integer>
+			<key>ypos</key>
+			<integer>1035</integer>
 		</dict>
 		<key>35C9CF21-8C3A-4CEB-AFEC-0DA08ED7D3CB</key>
 		<dict>
@@ -1220,6 +1287,15 @@ $python_path cli.py totp "${KP_ITEM_PATH}"</string>
 			<integer>865</integer>
 			<key>ypos</key>
 			<integer>90</integer>
+		</dict>
+		<key>59CD2005-E03D-44C0-8977-B964668AFDF6</key>
+		<dict>
+			<key>note</key>
+			<string>Check for updates for the workflow.</string>
+			<key>xpos</key>
+			<integer>65</integer>
+			<key>ypos</key>
+			<integer>1035</integer>
 		</dict>
 		<key>7146D7E9-9CC8-4AB4-A4CD-DE15B707908C</key>
 		<dict>

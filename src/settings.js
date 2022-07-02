@@ -803,6 +803,21 @@ function checkKeepassXC() {
 }
 
 
+function announceNewRelease(parameters) {
+    let version = parameters[0]
+    let downloadButton = "Download..."
+    let releaseNotesButton = "Release notes..."
+    let response = showDialog("New version is available!", [releaseNotesButton, downloadButton])
+    let repoUrl = "https://github.com/lxbrvr/alfred-keepassxc-workflow"
+    let actionsMap = {
+        [downloadButton]: function () {app.openLocation(`${repoUrl}/releases/download/${version}/keepassxc-${version}.alfredworkflow`)},
+        [releaseNotesButton]: function () {app.openLocation(`${repoUrl}/releases/tag/${version}`)},
+    }
+
+    actionsMap[response.buttonReturned]()
+}
+
+
 function getActionFuncByName(actionName) {
     let actionFuncsMap = {
         change: changeSettingKey,
@@ -811,6 +826,7 @@ function getActionFuncByName(actionName) {
         checkPython: checkPython,
         checkKeepassXC: checkKeepassXC,
         showMessage: function(argv) {showMessage(argv[0])},
+        announceNewRelease: announceNewRelease,
     }
 
     return actionFuncsMap[actionName]

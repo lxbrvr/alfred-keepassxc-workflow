@@ -1,10 +1,14 @@
 import binascii
+import json
+import os
 import re
 import subprocess
 import typing as t
 import unicodedata
+import urllib.request
 
 from conf import settings
+from helpers import Version
 
 
 class KeepassXCItem:
@@ -146,3 +150,44 @@ def initialize_keepassxc_client() -> KeepassXCClient:
     )
 
     return kp_client
+
+
+class WorkflowUpdatesChecker:
+    """Interface for checking updates for this workflow."""
+
+    def __init__(self) -> None:
+        self._cached_latest_version = None
+
+    @property
+    def current_version(self) -> Version:
+        """Returns a current version of the workflow.
+
+        The workflow's version is stored in ``alfred_workflow_version`` environment variable.
+        """
+
+        return Version(os.getenv("alfred_workflow_version"))
+
+    def fetch_latest_version(self) -> Version:
+        """Requests the latest version of the workflow from github repo.
+
+        Version is cached within one instance.
+        """
+
+        if self._cached_latest_version:
+            return self._cached_latest_version
+
+        url = "https://api.github.com/repos/lxbrvr/alfred-keepassxc-workflow/releases/latest"
+
+        with urllib.request.urlopen(url, timeout=10) as response:
+            latest_release_response = response.read()
+            latest_release = json.loads(latest_release_response)
+
+            self._cached_latest_version = Version(latest_release["tag_name"])
+            return self._cached_latest_version
+
+    def has_new_version(self) -> bool:
+        """Tells us if there is a new version of the workflow."""
+
+        latest_version = self.fetch_latest_version()
+
+        return latest_version > self.current_version
