@@ -66,6 +66,8 @@
 
 ## Usage
 
+### Commands
+
 | Command       | Description                                                                                                                                                                                                                                    |
 |---------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `kp:init`     | Express initialization. This is the first thing you need to do before searching for some KeepassXC database entries.<br/><br/>It'll ask you about KeepassXC database, KeepassXC key file and KeepassXC master password.                        |
@@ -74,7 +76,7 @@
 | `kp:reset`    | Resets the workflow settings to default values. It also removes the master password from Keychain.                                                                                                                                             |
 | `kp:about`    | Opens the workflow homepage in your default browser.                                                                                                                                                                                           |
 
-## Alternative actions for found KeepassXC records
+### Alternative actions for found KeepassXC records
 
 | Alternative action     | Description                                            |
 |------------------------|--------------------------------------------------------|
