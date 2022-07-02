@@ -83,7 +83,7 @@
 | Alternative action     | Description                                            |
 |------------------------|--------------------------------------------------------|
 | `Command ⌘ + Return ↵` | Automatically paste entry attributes to front most app |
-| `Opt ⌥ + Return ↵`.    | Show note details in full text                         | 
+| `Opt ⌥ + Return ↵`     | Show note details in full text                         | 
 
 ## Development
 
