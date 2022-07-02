@@ -22,6 +22,8 @@
   * [Requirements](#requirements)
   * [Download and import](#download-and-import)
 - [Usage](#usage)
+  * [Commands](#commands)
+  * [Alternative actions for attributes](#alternative-actions-for-attributes)
 - [Development](#development)
   * [The first initialization](#the-first-initialization)
   * [Testing](#testing)
@@ -66,7 +68,7 @@
 
 ## Usage
 
-### Commands
+#### Commands
 
 | Command       | Description                                                                                                                                                                                                                                    |
 |---------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -76,7 +78,7 @@
 | `kp:reset`    | Resets the workflow settings to default values. It also removes the master password from Keychain.                                                                                                                                             |
 | `kp:about`    | Opens the workflow homepage in your default browser.                                                                                                                                                                                           |
 
-### Alternative actions for found KeepassXC records
+#### Alternative actions for attributes
 
 | Alternative action     | Description                                            |
 |------------------------|--------------------------------------------------------|
