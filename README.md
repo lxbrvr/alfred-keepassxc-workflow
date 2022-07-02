@@ -74,6 +74,13 @@
 | `kp:reset`    | Resets the workflow settings to default values. It also removes the master password from Keychain.                                                                                                                                             |
 | `kp:about`    | Opens the workflow homepage in your default browser.                                                                                                                                                                                           |
 
+## Alternative actions for found KeepassXC records
+
+| Alternative action     | Description                                            |
+|------------------------|--------------------------------------------------------|
+| `Command ⌘ + Return ↵` | Automatically paste entry attributes to front most app |
+| `Opt ⌥ + Return ↵`.    | Show note details in full text                         | 
+
 ## Development
 
 #### The first initialization
