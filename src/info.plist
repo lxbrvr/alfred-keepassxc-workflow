@@ -1528,7 +1528,7 @@ $python_path cli.py check_for_updates</string>
 		<string>keychain_service</string>
 	</array>
 	<key>version</key>
-	<string>2.1.0</string>
+	<string>2.2.0</string>
 	<key>webaddress</key>
 	<string>https://github.com/lxbrvr/alfred-keepassxc-workflow</string>
 </dict>
