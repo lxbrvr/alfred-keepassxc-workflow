@@ -22,6 +22,7 @@
   * [Requirements](#requirements)
   * [Download and import](#download-and-import)
 - [Usage](#usage)
+  * [Initialization](#initialization)
   * [Commands](#commands)
   * [Alternative actions for attributes](#alternative-actions-for-attributes)
 - [Development](#development)
