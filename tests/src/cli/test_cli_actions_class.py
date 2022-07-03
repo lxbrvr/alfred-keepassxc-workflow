@@ -9,6 +9,7 @@ class TestChoicesMethod:
         CLIActions.SETTINGS_LIST,
         CLIActions.TOTP,
         CLIActions.CHECK_FOR_UPDATES,
+        CLIActions.OPEN_URL,
     ]
 
     assert actual_choices == expected_choices

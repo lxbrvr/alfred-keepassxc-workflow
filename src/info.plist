@@ -99,6 +99,18 @@
 			</dict>
 			<dict>
 				<key>destinationuid</key>
+				<string>C9953FF6-4D9A-42F9-BE19-01C34751DA2F</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>sourceoutputuid</key>
+				<string>EA75CF48-0F6D-4A94-AD4A-DDBCB1B81999</string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
 				<string>057C5A80-BFC0-43BF-A190-399A71855B4D</string>
 				<key>modifiers</key>
 				<integer>0</integer>
@@ -400,21 +412,6 @@
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>argument</key>
-				<string>{var:alfred_keyword} {var:USER_QUERY}</string>
-				<key>leftcursor</key>
-				<false/>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.utility.showalfred</string>
-			<key>uid</key>
-			<string>3A0E09EA-CA20-48DC-9F7D-CAFFB6981BA1</string>
-			<key>version</key>
-			<integer>1</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
 				<key>concurrently</key>
 				<true/>
 				<key>escaping</key>
@@ -434,6 +431,21 @@
 			<string>EEA7506E-4E4B-4D12-BBFC-3A2D30BB5BDD</string>
 			<key>version</key>
 			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argument</key>
+				<string>{var:alfred_keyword} {var:USER_QUERY}</string>
+				<key>leftcursor</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.showalfred</string>
+			<key>uid</key>
+			<string>3A0E09EA-CA20-48DC-9F7D-CAFFB6981BA1</string>
+			<key>version</key>
+			<integer>1</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -727,6 +739,20 @@ $python_path cli.py fetch "${KP_ITEM_PATH}"</string>
 						<key>uid</key>
 						<string>361DF126-D81A-4ABA-AD3C-3484AE182826</string>
 					</dict>
+					<dict>
+						<key>inputstring</key>
+						<string>{var:USER_ACTION}</string>
+						<key>matchcasesensitive</key>
+						<false/>
+						<key>matchmode</key>
+						<integer>0</integer>
+						<key>matchstring</key>
+						<string>alt_open_url</string>
+						<key>outputlabel</key>
+						<string>alt_open_url</string>
+						<key>uid</key>
+						<string>EA75CF48-0F6D-4A94-AD4A-DDBCB1B81999</string>
+					</dict>
 				</array>
 				<key>elselabel</key>
 				<string>copy</string>
@@ -776,6 +802,30 @@ $python_path cli.py fetch "${KP_ITEM_PATH}"</string>
 			<string>1F3CC929-CA46-411B-BD67-A40AABFBB308</string>
 			<key>version</key>
 			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<true/>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>script</key>
+				<string>osascript -l JavaScript settings.js checkPython &amp;&amp;  \
+$python_path cli.py open_url "$1"</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>C9953FF6-4D9A-42F9-BE19-01C34751DA2F</string>
+			<key>version</key>
+			<integer>2</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -1340,6 +1390,15 @@ $python_path cli.py check_for_updates</string>
 			<key>ypos</key>
 			<integer>865</integer>
 		</dict>
+		<key>C9953FF6-4D9A-42F9-BE19-01C34751DA2F</key>
+		<dict>
+			<key>note</key>
+			<string>Open url in a browser</string>
+			<key>xpos</key>
+			<integer>1230</integer>
+			<key>ypos</key>
+			<integer>160</integer>
+		</dict>
 		<key>CD5FD911-2F89-4F00-A8E3-D59DB8944A3B</key>
 		<dict>
 			<key>note</key>
@@ -1379,7 +1438,7 @@ $python_path cli.py check_for_updates</string>
 			<key>xpos</key>
 			<integer>1230</integer>
 			<key>ypos</key>
-			<integer>35</integer>
+			<integer>10</integer>
 		</dict>
 		<key>F51F13EF-FFAE-46EB-A4E1-2282CE664D61</key>
 		<dict>

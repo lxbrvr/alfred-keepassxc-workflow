@@ -9,6 +9,7 @@ from handlers import (
     check_for_updates_handler,
     fetch_handler,
     list_settings_handler,
+    open_url_handler,
     require_password,
     search_handler,
     totp_handler,
@@ -402,7 +403,7 @@ class TestFetchHandler:
         add_item_mock.assert_any_call(title="← Back", subtitle="Back to search", arg="back")
         assert add_item_mock.call_count == 6  # 1 is back button
 
-        for attribute in ["title", "username", "password", "url"]:
+        for attribute in ["title", "username", "password"]:
             add_item_mock.assert_any_call(
                 title=attribute.title(),
                 subtitle=expected_subtitle,
@@ -411,13 +412,14 @@ class TestFetchHandler:
                 mods=[alfred_mod_instance],
             )
 
-        add_item_mock.assert_any_call(
-            title="Notes",
-            subtitle=expected_subtitle,
-            is_valid=True,
-            arg=keepassxc_item_values,
-            mods=[alfred_mod_instance, alfred_mod_instance],
-        )
+        for attribute in ["notes", "url"]:
+            add_item_mock.assert_any_call(
+                title=attribute.title(),
+                subtitle=expected_subtitle,
+                is_valid=True,
+                arg=keepassxc_item_values,
+                mods=[alfred_mod_instance, alfred_mod_instance],
+            )
 
     def test_cmd_mod(self, valid_settings, environ_factory, keepassxc_item, keepassxc_client, mocker):
         environ_factory(desired_attributes="password", show_unfilled_attributes="yes")
@@ -518,6 +520,59 @@ class TestFetchHandler:
             try:
                 mod_mock.assert_has_calls([expected_call])
                 mod_instance_mock.add_variable.assert_any_call("USER_ACTION", "alt_notes")
+            except AssertionError:
+                pass
+
+    @pytest.mark.parametrize(
+        "is_url_desired, url, has_alt_call",
+        [
+            (True, "", False),
+            (True, "url", True),
+            (False, "", False),
+            (False, "url", False),
+        ],
+    )
+    def test_alt_notes_mod(
+        self,
+        valid_settings,
+        environ_factory,
+        keepassxc_item,
+        keepassxc_client,
+        mocker,
+        is_url_desired,
+        url,
+        has_alt_call,
+    ):
+        desired_attrs = "password"
+
+        if is_url_desired:
+            desired_attrs += ",url"
+
+        environ_factory(desired_attributes=desired_attrs, show_unfilled_attributes="yes")
+        keepassxc_item.password = "password"
+        keepassxc_item.url = url
+        mocker.patch.object(keepassxc_client, "show", return_value=keepassxc_item)
+        mocker.patch("handlers.initialize_keepassxc_client", return_value=keepassxc_client)
+        mocker.patch("handlers.AlfredScriptFilter.add_item")
+        mocker.patch("handlers.AlfredScriptFilter.send")
+        mod_mock = mocker.patch("handlers.AlfredMod")
+        mod_instance_mock = mod_mock.return_value
+        parsed_args = namedtuple("parsed_args", "query")
+        fetch_handler(parsed_args)
+
+        expected_call = mocker.call(
+            action="alt",
+            subtitle="Open url in the default browser.",
+            arg=keepassxc_item.url,
+        )
+
+        if has_alt_call:
+            mod_mock.assert_has_calls([expected_call])
+            mod_instance_mock.add_variable.assert_any_call("USER_ACTION", "alt_open_url")
+        else:
+            try:
+                mod_mock.assert_has_calls([expected_call])
+                mod_instance_mock.add_variable.assert_any_call("USER_ACTION", "alt_open_url")
             except AssertionError:
                 pass
 
@@ -714,6 +769,53 @@ class TestCheckForUpdatesHandler:
 
         popen_mock.assert_called_once_with(
             ["osascript", "-l", "JavaScript", "settings.js", "announceNewRelease", "1.2.3"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            stdin=subprocess.PIPE,
+        )
+
+
+class TestOpenUrlHandler:
+    @pytest.mark.parametrize(
+        "incoming_url, is_suitable_for_opening",
+        [
+            ("http://a", True),
+            ("https://a", True),
+            ("cmd://a", False),
+            ("kdbx://a", False),
+            ("a", True),
+        ],
+    )
+    def test_opening_depends_on_url_prefix(self, mocker, incoming_url, is_suitable_for_opening):
+        webbrowser_mock = mocker.patch("handlers.webbrowser.open")
+        open_url_handler(argparse.Namespace(url=incoming_url))
+
+        if is_suitable_for_opening:
+            webbrowser_mock.assert_called_once()
+        else:
+            webbrowser_mock.assert_not_called()
+
+    @pytest.mark.parametrize(
+        "incoming_url, expected_url",
+        [
+            ("http://a", "http://a"),
+            ("https://a", "https://a"),
+            ("a", "http://a"),
+        ],
+    )
+    def test_opened_url(self, mocker, incoming_url, expected_url):
+        webbrowser_mock = mocker.patch("handlers.webbrowser.open")
+        open_url_handler(argparse.Namespace(url=incoming_url))
+
+        webbrowser_mock.assert_called_once_with(expected_url)
+
+    @pytest.mark.parametrize("incoming_url", ["cmd://a", "kdbx://a"])
+    def test_message_with_excluded_prefixes(self, mocker, incoming_url):
+        popen_mock = mocker.patch("handlers.subprocess.Popen")
+        open_url_handler(argparse.Namespace(url=incoming_url))
+        expected_message = "Cannot open urls that start with cmd:// or kdbx://."
+        popen_mock.assert_called_once_with(
+            ["osascript", "-l", "JavaScript", "settings.js", "showMessage", expected_message],
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             stdin=subprocess.PIPE,

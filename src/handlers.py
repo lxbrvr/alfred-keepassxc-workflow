@@ -1,6 +1,7 @@
 import argparse
 import subprocess
 import typing as t
+import webbrowser
 
 from alfred import AlfredMod, AlfredModActionEnum, AlfredScriptFilter
 from conf import settings
@@ -129,6 +130,13 @@ def fetch_handler(parsed_args: argparse.Namespace) -> None:
             mod.add_variable("USER_ACTION", "alt_notes")
             mods.append(mod)
 
+        if desired_attr == "url" and entry_value:
+            mod = AlfredMod(
+                action=AlfredModActionEnum.ALT, subtitle="Open url in the default browser.", arg=entry_value
+            )
+            mod.add_variable("USER_ACTION", "alt_open_url")
+            mods.append(mod)
+
         script_filter.add_item(title=title, subtitle=subtitle, is_valid=is_valid, arg=entry_value, mods=mods)
 
     script_filter.send()
@@ -156,7 +164,7 @@ def totp_handler(parsed_args: argparse.Namespace) -> None:
 
 
 def check_for_updates_handler(_: argparse.Namespace) -> None:
-    """Check for updates for the workflow.
+    """Checks for updates for the workflow.
 
     The new release message will be shown to the user after 30 seconds if this
     handler was run in the background. This behavior is intended not to interrupt
@@ -182,6 +190,28 @@ def check_for_updates_handler(_: argparse.Namespace) -> None:
         message = f"Version {release_checker.current_version.raw} is the newest version available at the moment."
         command = ["osascript", "-l", "JavaScript", "settings.js", "showMessage", message]
         subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, stdin=subprocess.PIPE)
+
+
+def open_url_handler(parsed_args: argparse.Namespace) -> None:
+    """Opens incoming url in a default browser.
+
+    If the url starts with cmd:// or kdbx:// it will not open
+    because KeepassXC uses such urls for other actions.
+    """
+
+    excluded_prefixes = ("cmd://", "kdbx://")  # for other actions in KeepassXC
+    incoming_url = parsed_args.url
+
+    if incoming_url.startswith(excluded_prefixes):
+        message = f"Cannot open urls that start with {' or '.join(excluded_prefixes)}."
+        command = ["osascript", "-l", "JavaScript", "settings.js", "showMessage", message]
+        subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, stdin=subprocess.PIPE)
+        return
+
+    if not incoming_url.startswith(("http://", "https://")):
+        incoming_url = f"http://{parsed_args.url}"  # webbrowser doesn't open urls without the protocol.
+
+    webbrowser.open(incoming_url)
 
 
 def list_settings_handler(_: argparse.Namespace) -> None:

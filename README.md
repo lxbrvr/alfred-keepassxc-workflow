@@ -50,7 +50,8 @@
 - It works with KeepassXC key files
 - It saves your KeepassXC master password to OSX Keychain.
 - No dependencies. Only Alfred and KeepassXC.
-- Automatically paste entry attributes to front most app with `Command ⌘ + Return ↵`.
+- Automatically paste entry attributes to front most app with.
+- Open urls in default browser.
 - Clipboard timeout.
 
 ## Installation
@@ -80,10 +81,11 @@
 
 #### Alternative actions for attributes
 
-| Alternative action     | Description                                            |
-|------------------------|--------------------------------------------------------|
-| `Command ⌘ + Return ↵` | Automatically paste entry attributes to front most app |
-| `Opt ⌥ + Return ↵`     | Show note details in full text                         | 
+| Attribute name | Alternative action     | Description                                            |
+|----------------|------------------------|--------------------------------------------------------|
+| All            | `Command ⌘ + Return ↵` | Automatically paste entry attributes to front most app |
+| Notes          | `Opt ⌥ + Return ↵`     | Show note details in full text                         | 
+| Url            | `Opt ⌥ + Return ↵`     | Open url in a default browser                          | 
 
 ## Development
 
