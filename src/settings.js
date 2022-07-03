@@ -794,10 +794,6 @@ function checkPython() {
 
 
 function checkKeepassXC() {
-    if (isEmptySettings() || isDefaultSettings()) {
-        return
-    }
-
     let keepassxcPath = askDependencyPathIfNecessary("KeepassXC CLI")
 
     if (keepassxcPath !== Settings.KEEPASSXC_CLI_PATH) {
