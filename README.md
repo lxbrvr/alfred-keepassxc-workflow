@@ -86,6 +86,7 @@ It'll ask you about KeepassXC database, KeepassXC key file and KeepassXC master 
 | `kp:settings` | Settings for the workflow.                                                                                                                                                                                                                     |
 | `kp:reset`    | Resets the workflow settings to default values. It also removes the master password from Keychain.                                                                                                                                             |
 | `kp:about`    | Opens the workflow homepage in your default browser.                                                                                                                                                                                           |
+| `kp:updates`  | Check for updates for the workflow.                                                                                                                                                                                                            |
 
 #### Alternative actions for attributes
 
