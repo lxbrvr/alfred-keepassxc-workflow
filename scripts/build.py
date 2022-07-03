@@ -30,6 +30,7 @@ def copy_source(source, destination):
         "__init__.py",
         "alfred.py",
         "cli.py",
+        "clip.js",
         "conf.py",
         "handlers.py",
         "helpers.py",
